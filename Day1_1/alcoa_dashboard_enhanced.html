@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALCOA+ Equipment Metadata Integrity Dashboard - Eli Lilly</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Professional Pharma Color Palette */
+            --primary-color: #0052CC;
+            --secondary-color: #1B5E8C;
+            --accent-color: #2E7D32;
+            --warning-color: #F57C00;
+            --danger-color: #C62828;
+            --info-color: #1976D2;
+            --success-color: #2E7D32;
+
+            /* Neutrals */
+            --dark-gray: #1A1A1A;
+            --medium-gray: #424242;
+            --light-gray: #F5F5F5;
+            --border-gray: #E0E0E0;
+
+            /* Background */
+            --bg-light: #FFFFFF;
+            --bg-dark: #121212;
+            --bg-alt: #F8F9FA;
+
+            /* Text */
+            --text-primary: #212121;
+            --text-secondary: #666666;
+            --text-light: #999999;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+            --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.18);
+
+            /* Spacing */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+        }
+
+        html.dark-mode {
+            --bg-light: #1E1E1E;
+            --bg-dark: #121212;
+            --bg-alt: #2A2A2A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B0B0;
+            --text-light: #808080;
+            --border-gray: #404040;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+
+        .header-title {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .header-title h1 {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .header-title p {
+            font-size: 0.9em;
+            opacity: 0.95;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: var(--spacing-md);
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .help-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s;
+        }
+
+        .help-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: var(--spacing-sm);
+            border-bottom: 2px solid var(--border-gray);
+            background: var(--bg-light);
+            padding: var(--spacing-md) var(--spacing-lg);
+            overflow-x: auto;
+            max-width: 1600px;
+            margin: 0 auto;
+            position: sticky;
+            top: 90px;
+            z-index: 99;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-tab {
+            background: none;
+            border: none;
+            padding: var(--spacing-md) var(--spacing-lg);
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* Container & Layout */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: var(--spacing-lg);
+        }
+
+        .main-content {
+            display: none;
+        }
+
+        .main-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Card Components */
+        .card {
+            background: var(--bg-light);
+            border-radius: 12px;
+            border: 1px solid var(--border-gray);
+            box-shadow: var(--shadow-md);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--border-gray);
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-subtitle {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Grid Layouts */
+        .grid {
+            display: grid;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        @media (max-width: 1200px) {
+            .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        label {
+            display: block;
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-bottom: 6px;
+            font-size: 0.9em;
+        }
+
+        .label-required::after {
+            content: " *";
+            color: var(--danger-color);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-family: inherit;
+            background: var(--bg-light);
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
+        }
+
+        input::placeholder {
+            color: var(--text-light);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            white-space: nowrap;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--light-gray);
+            color: var(--text-primary);
+            border: 1px solid var(--border-gray);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-alt);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1B5E20;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #B71C1C;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.85em;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* ALCOA Principles Grid */
+        .alcoa-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+        }
+
+        .alcoa-item {
+            padding: var(--spacing-md);
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid var(--border-gray);
+            background: var(--bg-alt);
+            position: relative;
+        }
+
+        .alcoa-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .alcoa-item.checked {
+            background: linear-gradient(135deg, var(--success-color), #66BB6A);
+            color: white;
+            border-color: var(--success-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        .alcoa-item-icon {
+            font-size: 1.8em;
+            margin-bottom: 6px;
+        }
+
+        .alcoa-item-name {
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .alcoa-item-desc {
+            font-size: 0.75em;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+
+        /* Status Indicators */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            gap: 4px;
+        }
+
+        .status-compliant {
+            background: #E8F5E9;
+            color: #1B5E20;
+        }
+
+        .status-warning {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+        .status-critical {
+            background: #FFEBEE;
+            color: #B71C1C;
+        }
+
+        .status-info {
+            background: #E3F2FD;
+            color: #0D47A1;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        .dot-compliant { background: var(--success-color); }
+        .dot-warning { background: var(--warning-color); }
+        .dot-critical { background: var(--danger-color); }
+        .dot-info { background: var(--info-color); }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-gray);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-light);
+        }
+
+        thead {
+            background: var(--bg-alt);
+            border-bottom: 2px solid var(--border-gray);
+        }
+
+        th {
+            padding: var(--spacing-md);
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9em;
+        }
+
+        td {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--border-gray);
+            font-size: 0.9em;
+        }
+
+        tbody tr:hover {
+            background: var(--bg-alt);
+        }
+
+        tbody tr.selected {
+            background: rgba(0, 82, 204, 0.05);
+        }
+
+        /* Equipment List */
+        .equipment-item {
+            background: var(--bg-alt);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .equipment-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-md);
+            transform: translateX(4px);
+        }
+
+        .equipment-item.selected {
+            border-color: var(--primary-color);
+            background: rgba(0, 82, 204, 0.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        .equipment-info {
+            flex: 1;
+        }
+
+        .equipment-id {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.95em;
+        }
+
+        .equipment-name {
+            font-size: 0.95em;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .equipment-meta {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .equipment-stats {
+            display: flex;
+            gap: var(--spacing-lg);
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: right;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: var(--text-secondary);
+        }
+
+        .stat-value {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Metric Cards */
+        .metric-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: var(--spacing-lg);
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 0.95em;
+            opacity: 0.95;
+        }
+
+        .metric-card.success {
+            background: linear-gradient(135deg, var(--success-color), #66BB6A);
+        }
+
+        .metric-card.warning {
+            background: linear-gradient(135deg, var(--warning-color), #FF9100);
+        }
+
+        .metric-card.danger {
+            background: linear-gradient(135deg, var(--danger-color), #E53935);
+        }
+
+        /* Search & Filter Bar */
+        .search-bar {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-input input {
+            padding-left: 36px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            pointer-events: none;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--border-gray);
+            background: var(--bg-light);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: var(--spacing-lg) 0;
+        }
+
+        .chart-wrapper {
+            background: var(--bg-light);
+            border-radius: 12px;
+            border: 1px solid var(--border-gray);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-light);
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--border-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.3em;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: var(--spacing-lg);
+        }
+
+        .modal-footer {
+            padding: var(--spacing-lg);
+            border-top: 1px solid var(--border-gray);
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: flex-end;
+        }
+
+        /* Notifications/Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+            max-width: 400px;
+        }
+
+        .toast {
+            background: var(--bg-light);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 8px;
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); }
+            to { transform: translateX(0); }
+        }
+
+        .toast.success {
+            border-left-color: var(--success-color);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger-color);
+        }
+
+        .toast.warning {
+            border-left-color: var(--warning-color);
+        }
+
+        .toast-message {
+            flex: 1;
+            font-size: 0.9em;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 1.2em;
+        }
+
+        /* Help Section */
+        .help-section {
+            background: var(--bg-alt);
+            border-left: 4px solid var(--info-color);
+            padding: var(--spacing-md);
+            border-radius: 8px;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .help-title {
+            font-weight: 600;
+            color: var(--info-color);
+            margin-bottom: 8px;
+        }
+
+        .help-text {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-xl);
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3em;
+            margin-bottom: var(--spacing-md);
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .empty-state-text {
+            font-size: 0.9em;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .app-header {
+                padding: var(--spacing-md);
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-title h1 {
+                font-size: 1.4em;
+            }
+
+            .header-controls {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .nav-tabs {
+                padding: var(--spacing-md);
+            }
+
+            .container {
+                padding: var(--spacing-md);
+            }
+
+            .equipment-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .equipment-stats {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .toast-container {
+                left: 10px;
+                right: 10px;
+                max-width: none;
+            }
+        }
+
+        /* Utility Classes */
+        .mt { margin-top: var(--spacing-md); }
+        .mb { margin-bottom: var(--spacing-md); }
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="app-header">
+        <div class="header-content">
+            <div class="header-title">
+                <h1>⚙️ ALCOA+ Equipment Metadata Integrity Dashboard</h1>
+                <p>Eli Lilly - Equipment Compliance Assessment Platform</p>
+            </div>
+            <div class="header-controls">
+                <button class="theme-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+                    <span id="themeIcon">🌙</span>
+                </button>
+                <div class="help-icon" onclick="showHelpModal()" title="Help & Guide">?</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+        <button class="nav-tab" onclick="switchTab('equipment')">⚙️ Equipment Registry</button>
+        <button class="nav-tab" onclick="switchTab('assessment')">✅ Assessment</button>
+        <button class="nav-tab" onclick="switchTab('analytics')">📈 Analytics</button>
+        <button class="nav-tab" onclick="switchTab('audit')">📋 Audit Trail</button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="main-content active">
+            <div class="help-section">
+                <div class="help-title">📌 Quick Start</div>
+                <div class="help-text">
+                    Add equipment using the Assessment tab, select ALCOA+ principles, and monitor compliance status. View detailed analytics and audit trails for regulatory reporting.
+                </div>
+            </div>
+
+            <div class="grid grid-4">
+                <div class="metric-card">
+                    <div class="metric-value" id="dashboardTotal">0</div>
+                    <div class="metric-label">Total Equipment</div>
+                </div>
+                <div class="metric-card success">
+                    <div class="metric-value" id="dashboardCompliant">0</div>
+                    <div class="metric-label">Fully Compliant</div>
+                </div>
+                <div class="metric-card warning">
+                    <div class="metric-value" id="dashboardPartial">0</div>
+                    <div class="metric-label">Partial Compliance</div>
+                </div>
+                <div class="metric-card danger">
+                    <div class="metric-value" id="dashboardNonCompliant">0</div>
+                    <div class="metric-label">Non-Compliant</div>
+                </div>
+            </div>
+
+            <div class="grid grid-2" style="margin-top: var(--spacing-lg);">
+                <div class="chart-wrapper">
+                    <div style="display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                        <h3 class="card-title">Compliance Distribution</h3>
+                        <span class="status-badge status-info">Last 30 Days</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="complianceChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <h3 class="card-title" style="margin-bottom: var(--spacing-md);">Compliance by Department</h3>
+                    <div class="chart-container">
+                        <canvas id="departmentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-wrapper" style="margin-top: var(--spacing-lg);">
+                <h3 class="card-title" style="margin-bottom: var(--spacing-md);">Compliance Trend Over Time</h3>
+                <div class="chart-container" style="height: 250px;">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Equipment Registry Tab -->
+        <div id="equipment" class="main-content">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Equipment Registry</h2>
+                        <p class="card-subtitle">Search, filter, and compare equipment</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showComparisonModal()">🔄 Compare Equipment</button>
+                </div>
+
+                <div class="search-bar">
+                    <div class="search-input">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="searchInput" placeholder="Search by ID, name, or location..." onkeyup="filterEquipment()">
+                    </div>
+                    <select id="departmentFilter" onchange="filterEquipment()" class="form-group" style="min-width: 200px; margin-bottom: 0;">
+                        <option value="">All Departments</option>
+                        <option value="Laboratory A">Laboratory A</option>
+                        <option value="Chemistry Lab">Chemistry Lab</option>
+                        <option value="QA Lab">QA Lab</option>
+                    </select>
+                    <select id="statusFilter" onchange="filterEquipment()" style="min-width: 150px;">
+                        <option value="">All Status</option>
+                        <option value="compliant">Compliant</option>
+                        <option value="warning">Warning</option>
+                        <option value="critical">Critical</option>
+                    </select>
+                </div>
+
+                <div id="equipmentEmptyState" class="empty-state" style="display: none;">
+                    <div class="empty-state-icon">📦</div>
+                    <div class="empty-state-title">No equipment found</div>
+                    <div class="empty-state-text">Add equipment from the Assessment tab to get started</div>
+                </div>
+
+                <div id="equipmentListContainer">
+                    <!-- Equipment items will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Assessment Tab -->
+        <div id="assessment" class="main-content">
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title">Equipment Information</h2>
+                            <p class="card-subtitle">Enter equipment details</p>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="equipmentId" class="label-required">Equipment ID</label>
+                            <input type="text" id="equipmentId" placeholder="e.g., EQ-2024-001" maxlength="50">
+                        </div>
+                        <div class="form-group">
+                            <label for="equipmentName" class="label-required">Equipment Name</label>
+                            <input type="text" id="equipmentName" placeholder="e.g., Analytical Balance" maxlength="100">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="manufacturer">Manufacturer</label>
+                            <input type="text" id="manufacturer" placeholder="e.g., Mettler-Toledo" maxlength="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="serialNumber">Serial Number</label>
+                            <input type="text" id="serialNumber" placeholder="e.g., SN-987654" maxlength="50">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="location" class="label-required">Location/Department</label>
+                            <select id="location">
+                                <option value="">Select location...</option>
+                                <option value="Laboratory A">Laboratory A, Building 5</option>
+                                <option value="Chemistry Lab">Chemistry Lab, Building 3</option>
+                                <option value="QA Lab">QA Lab, Building 2</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="owner">Owner/Responsible Person</label>
+                            <input type="text" id="owner" placeholder="e.g., Dr. John Smith" maxlength="100">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lastCalibration">Last Calibration Date</label>
+                            <input type="date" id="lastCalibration">
+                        </div>
+                        <div class="form-group">
+                            <label for="nextCalibration">Next Calibration Due</label>
+                            <input type="date" id="nextCalibration">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="metadata">Additional Metadata</label>
+                        <textarea id="metadata" placeholder="Any additional information about equipment, maintenance history, or special notes..."></textarea>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title">ALCOA+ Principles</h2>
+                            <p class="card-subtitle">Select applicable principles</p>
+                        </div>
+                    </div>
+
+                    <div class="alcoa-grid">
+                        <div class="alcoa-item" onclick="togglePrinciple(this, 'attributable')">
+                            <div class="alcoa-item-icon">📋</div>
+                            <div class="alcoa-item-name">Attributable</div>
+                            <div class="alcoa-item-desc">User/Time</div>
+                        </div>
+                        <div class="alcoa-item" onclick="togglePrinciple(this, 'legible')">
+                            <div class="alcoa-item-icon">👁️</div>
+                            <div class="alcoa-item-name">Legible</div>
+                            <div class="alcoa-item-desc">Readable</div>
+                        </div>
+                        <div class="alcoa-item" onclick="togglePrinciple(this, 'contemporaneous')">
+                            <div class="alcoa-item-icon">⏰</div>
+                            <div class="alcoa-item-name">Contemporary</div>
+                            <div class="alcoa-item-desc">At time</div>
+                        </div>
+                        <div class="alcoa-item" onclick="togglePrinciple(this, 'original')">
+                            <div class="alcoa-item-icon">📄</div>
+                            <div class="alcoa-item-name">Original</div>
+                            <div class="alcoa-item-desc">First copy</div>
+                        </div>
+                        <div class="alcoa-item" onclick="togglePrinciple(this, 'accurate')">
+                            <div class="alcoa-item-icon">🎯</div>
+                            <div class="alcoa-item-name">Accurate</div>
+                            <div class="alcoa-item-desc">Verified</div>
+                        </div>
+                        <div class="alcoa-item" onclick="togglePrinciple(this, 'plus')">
+                            <div class="alcoa-item-icon">➕</div>
+                            <div class="alcoa-item-name">Complete+</div>
+                            <div class="alcoa-item-desc">Consistent</div>
+                        </div>
+                    </div>
+
+                    <div id="complianceScore" style="text-align: center; padding: var(--spacing-lg); background: var(--bg-alt); border-radius: 8px; margin-top: var(--spacing-md);">
+                        <div style="font-size: 0.9em; color: var(--text-secondary); margin-bottom: 8px;">Compliance Score</div>
+                        <div style="font-size: 2.5em; font-weight: 700; color: var(--primary-color);" id="scoreDisplay">0%</div>
+                    </div>
+
+                    <button class="btn btn-primary btn-full mt" onclick="addEquipment()">✅ Add Equipment</button>
+                    <button class="btn btn-secondary btn-full mt" onclick="clearAssessmentForm()">🔄 Reset Form</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div id="analytics" class="main-content">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Compliance Analytics</h2>
+                        <p class="card-subtitle">Detailed compliance metrics and insights</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div>
+                        <h3 style="margin-bottom: var(--spacing-md); font-size: 1.1em;">ALCOA+ Principle Compliance</h3>
+                        <div class="chart-container">
+                            <canvas id="principleChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: var(--spacing-md); font-size: 1.1em;">Calibration Status</h3>
+                        <div class="chart-container">
+                            <canvas id="calibrationChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-wrapper" style="margin-top: var(--spacing-lg);">
+                    <h3 style="margin-bottom: var(--spacing-md); font-size: 1.1em;">Compliance Score Distribution</h3>
+                    <div class="chart-container" style="height: 250px;">
+                        <canvas id="scoreDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: var(--spacing-lg);">
+                <div class="card-header">
+                    <h2 class="card-title">Summary Statistics</h2>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th style="text-align: right;">Value</th>
+                                <th style="text-align: right;">Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody id="analyticsTableBody">
+                            <tr>
+                                <td colspan="3" style="text-align: center; padding: var(--spacing-xl); color: var(--text-secondary);">
+                                    No data available. Add equipment to view analytics.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audit Trail Tab -->
+        <div id="audit" class="main-content">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Audit Trail</h2>
+                        <p class="card-subtitle">Equipment assessment history and modifications</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="exportAuditTrail()">📥 Export Audit Trail</button>
+                </div>
+
+                <div id="auditEmptyState" class="empty-state" style="padding: var(--spacing-xl);">
+                    <div class="empty-state-icon">📋</div>
+                    <div class="empty-state-title">No audit entries yet</div>
+                    <div class="empty-state-text">Audit entries will appear here as you add and modify equipment</div>
+                </div>
+
+                <div id="auditTrailContainer" class="hidden">
+                    <!-- Audit entries will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Help & Guide</h2>
+                <button class="modal-close" onclick="closeModal('helpModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="line-height: 1.8;">
+                    <h3 style="color: var(--primary-color); margin: var(--spacing-md) 0 var(--spacing-sm) 0;">About ALCOA+ Principles</h3>
+                    <p style="margin-bottom: var(--spacing-md);">
+                        ALCOA+ ensures that electronic records and signatures are reliable, authentic, and trustworthy. These principles are critical for regulatory compliance in pharmaceutical manufacturing.
+                    </p>
+
+                    <h4 style="color: var(--text-primary); margin: var(--spacing-md) 0 var(--spacing-sm) 0;">The Six Principles:</h4>
+                    <ul style="margin-left: var(--spacing-lg); margin-bottom: var(--spacing-md); color: var(--text-secondary);">
+                        <li><strong>Attributable:</strong> All data entries traced to individuals with timestamps</li>
+                        <li><strong>Legible:</strong> Data is clear, readable, and easily interpretable</li>
+                        <li><strong>Contemporaneous:</strong> Records made at the time events occur</li>
+                        <li><strong>Original:</strong> Original records preserved and protected</li>
+                        <li><strong>Accurate:</strong> Data verified for correctness and completeness</li>
+                        <li><strong>ALCOA+:</strong> Complete and consistent data formatting</li>
+                    </ul>
+
+                    <h3 style="color: var(--primary-color); margin: var(--spacing-lg) 0 var(--spacing-sm) 0;">How to Use This Dashboard</h3>
+                    <ol style="margin-left: var(--spacing-lg); color: var(--text-secondary);">
+                        <li><strong>Assessment Tab:</strong> Add equipment and select ALCOA+ principles that apply</li>
+                        <li><strong>Equipment Registry:</strong> View all equipment, search, filter, and compare</li>
+                        <li><strong>Analytics Tab:</strong> View compliance trends and detailed metrics</li>
+                        <li><strong>Audit Trail:</strong> Track all modifications and assessments for compliance reporting</li>
+                    </ol>
+
+                    <h3 style="color: var(--primary-color); margin: var(--spacing-lg) 0 var(--spacing-sm) 0;">Compliance Status Colors</h3>
+                    <div style="display: grid; gap: var(--spacing-md); margin-top: var(--spacing-md);">
+                        <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+                            <div class="status-badge status-compliant">✓ Compliant</div>
+                            <span style="color: var(--text-secondary);">100% of principles met</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+                            <div class="status-badge status-warning">⚠ Warning</div>
+                            <span style="color: var(--text-secondary);">50-99% of principles met</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+                            <div class="status-badge status-critical">✗ Critical</div>
+                            <span style="color: var(--text-secondary);">Less than 50% of principles met</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Equipment Comparison Modal -->
+    <div id="comparisonModal" class="modal">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-header">
+                <h2>Equipment Comparison</h2>
+                <button class="modal-close" onclick="closeModal('comparisonModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="comparisonContent">
+                    <!-- Comparison table will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ==================== STATE MANAGEMENT ====================
+        let equipment = [];
+        let selectedPrinciples = new Set();
+        let auditTrail = [];
+        let charts = {};
+        let filteredEquipment = [];
+
+        const principleDetails = {
+            attributable: { name: "Attributable", icon: "📋", description: "User/Time logged", details: "All data entries must be attributable to a specific individual" },
+            legible: { name: "Legible", icon: "👁️", description: "Clearly readable", details: "All metadata must be clear and easily readable" },
+            contemporaneous: { name: "Contemporaneous", icon: "⏰", description: "Recorded at time", details: "Metadata must be recorded at the time the event occurs" },
+            original: { name: "Original", icon: "📄", description: "First occurrence", details: "The original record must be maintained and preserved" },
+            accurate: { name: "Accurate", icon: "🎯", description: "Correct & verified", details: "All metadata must be accurate and verified" },
+            plus: { name: "Complete+", icon: "➕", description: "Complete & Consistent", details: "Data must be complete and consistent throughout" }
+        };
+
+        // ==================== INITIALIZATION ====================
+        window.addEventListener('load', () => {
+            initializeDarkMode();
+            loadSampleData();
+            initCharts();
+        });
+
+        function initializeDarkMode() {
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (isDarkMode) {
+                document.documentElement.classList.add('dark-mode');
+                document.getElementById('themeIcon').textContent = '☀️';
+            }
+        }
+
+        // ==================== DARK MODE ====================
+        function toggleDarkMode() {
+            const isDarkMode = document.documentElement.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+            document.getElementById('themeIcon').textContent = isDarkMode ? '☀️' : '🌙';
+            setTimeout(() => updateCharts(), 300);
+            showToast('Theme updated', 'success');
+        }
+
+        // ==================== NAVIGATION ====================
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.main-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Update charts if needed
+            if (tabName === 'analytics') {
+                setTimeout(() => updateCharts(), 100);
+            }
+        }
+
+        // ==================== FORM & EQUIPMENT ====================
+        function togglePrinciple(element, principle) {
+            element.classList.toggle('checked');
+            if (element.classList.contains('checked')) {
+                selectedPrinciples.add(principle);
+            } else {
+                selectedPrinciples.delete(principle);
+            }
+            updateComplianceScore();
+        }
+
+        function updateComplianceScore() {
+            const score = (selectedPrinciples.size / 6) * 100;
+            document.getElementById('scoreDisplay').textContent = Math.round(score) + '%';
+        }
+
+        function addEquipment() {
+            const equipmentId = document.getElementById('equipmentId').value;
+            const equipmentName = document.getElementById('equipmentName').value;
+            const location = document.getElementById('location').value;
+
+            if (!equipmentId || !equipmentName || !location) {
+                showToast('Please fill in required fields', 'error');
+                return;
+            }
+
+            if (selectedPrinciples.size === 0) {
+                showToast('Please select at least one ALCOA+ principle', 'error');
+                return;
+            }
+
+            const equipmentEntry = {
+                id: Date.now(),
+                equipmentId,
+                equipmentName,
+                manufacturer: document.getElementById('manufacturer').value,
+                serialNumber: document.getElementById('serialNumber').value,
+                location,
+                lastCalibration: document.getElementById('lastCalibration').value,
+                nextCalibration: document.getElementById('nextCalibration').value,
+                owner: document.getElementById('owner').value,
+                metadata: document.getElementById('metadata').value,
+                principles: Array.from(selectedPrinciples),
+                complianceScore: (selectedPrinciples.size / 6) * 100,
+                timestamp: new Date().toISOString(),
+                status: getComplianceStatus((selectedPrinciples.size / 6) * 100)
+            };
+
+            equipment.push(equipmentEntry);
+            addAuditEntry('CREATED', equipmentEntry, null);
+            clearAssessmentForm();
+            updateAllViews();
+            showToast(`Equipment "${equipmentName}" added successfully`, 'success');
+        }
+
+        function clearAssessmentForm() {
+            document.getElementById('equipmentId').value = '';
+            document.getElementById('equipmentName').value = '';
+            document.getElementById('manufacturer').value = '';
+            document.getElementById('serialNumber').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('lastCalibration').value = '';
+            document.getElementById('nextCalibration').value = '';
+            document.getElementById('owner').value = '';
+            document.getElementById('metadata').value = '';
+            selectedPrinciples.clear();
+            document.querySelectorAll('.alcoa-item').forEach(item => item.classList.remove('checked'));
+            updateComplianceScore();
+        }
+
+        // ==================== EQUIPMENT REGISTRY ====================
+        function updateEquipmentRegistry() {
+            const container = document.getElementById('equipmentListContainer');
+            const emptyState = document.getElementById('equipmentEmptyState');
+
+            filteredEquipment = equipment;
+            applyFilters();
+
+            if (filteredEquipment.length === 0) {
+                container.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            container.innerHTML = filteredEquipment.map((eq, index) => `
+                <div class="equipment-item" onclick="selectEquipmentItem(${equipment.indexOf(eq)})">
+                    <div class="equipment-info">
+                        <div class="equipment-id">${eq.equipmentId}</div>
+                        <div class="equipment-name">${eq.equipmentName}</div>
+                        <div class="equipment-meta">
+                            📍 ${eq.location} | ${eq.manufacturer || 'Unknown'} | ${eq.owner || 'Unassigned'}
+                        </div>
+                    </div>
+                    <div class="equipment-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Compliance</div>
+                            <div class="stat-value">${Math.round(eq.complianceScore)}%</div>
+                        </div>
+                        <div style="min-width: 120px;">
+                            <span class="status-badge ${getStatusClass(eq.status)}">
+                                <span class="dot dot-${eq.status}"></span>${capitalizeFirst(eq.status)}
+                            </span>
+                        </div>
+                        <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation(); showEquipmentDetails(${equipment.indexOf(eq)})">View</button>
+                        <button class="btn btn-sm btn-danger" onclick="event.stopPropagation(); deleteEquipment(${equipment.indexOf(eq)})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterEquipment() {
+            const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
+            const department = document.getElementById('departmentFilter')?.value || '';
+            const status = document.getElementById('statusFilter')?.value || '';
+
+            filteredEquipment = equipment.filter(eq => {
+                const matchesSearch = !search ||
+                    eq.equipmentId.toLowerCase().includes(search) ||
+                    eq.equipmentName.toLowerCase().includes(search) ||
+                    eq.location.toLowerCase().includes(search);
+
+                const matchesDept = !department || eq.location.includes(department);
+                const matchesStatus = !status || eq.status === status;
+
+                return matchesSearch && matchesDept && matchesStatus;
+            });
+
+            updateEquipmentRegistry();
+        }
+
+        function applyFilters() {
+            // Filters already applied in filterEquipment()
+        }
+
+        function selectEquipmentItem(index) {
+            document.querySelectorAll('.equipment-item').forEach(item => item.classList.remove('selected'));
+            if (document.querySelectorAll('.equipment-item')[index]) {
+                document.querySelectorAll('.equipment-item')[index].classList.add('selected');
+            }
+        }
+
+        function deleteEquipment(index) {
+            if (confirm(`Delete ${equipment[index].equipmentName}?`)) {
+                const deleted = equipment.splice(index, 1)[0];
+                addAuditEntry('DELETED', deleted, null);
+                updateAllViews();
+                showToast('Equipment deleted successfully', 'success');
+            }
+        }
+
+        // ==================== MODALS ====================
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function showHelpModal() {
+            document.getElementById('helpModal').classList.add('show');
+        }
+
+        function showEquipmentDetails(index) {
+            const eq = equipment[index];
+            // In a full implementation, this would show detailed equipment information
+            showToast(`View details for ${eq.equipmentName}`, 'info');
+        }
+
+        function showComparisonModal() {
+            if (equipment.length === 0) {
+                showToast('No equipment to compare', 'error');
+                return;
+            }
+
+            const modal = document.getElementById('comparisonModal');
+            const content = document.getElementById('comparisonContent');
+
+            let html = '<div class="table-container"><table><thead><tr><th>Equipment ID</th><th>Name</th><th>Location</th><th>Compliance</th><th>Status</th><th>Principles</th></tr></thead><tbody>';
+
+            equipment.forEach(eq => {
+                html += `<tr>
+                    <td><strong>${eq.equipmentId}</strong></td>
+                    <td>${eq.equipmentName}</td>
+                    <td>${eq.location}</td>
+                    <td>${Math.round(eq.complianceScore)}%</td>
+                    <td><span class="status-badge ${getStatusClass(eq.status)}"><span class="dot dot-${eq.status}"></span>${capitalizeFirst(eq.status)}</span></td>
+                    <td>${eq.principles.length}/6</td>
+                </tr>`;
+            });
+
+            html += '</tbody></table></div>';
+            content.innerHTML = html;
+            modal.classList.add('show');
+        }
+
+        // ==================== DASHBOARD & ANALYTICS ====================
+        function updateDashboard() {
+            const total = equipment.length;
+            const compliant = equipment.filter(eq => eq.complianceScore === 100).length;
+            const partial = equipment.filter(eq => eq.complianceScore > 0 && eq.complianceScore < 100).length;
+            const nonCompliant = equipment.filter(eq => eq.complianceScore === 0).length;
+
+            document.getElementById('dashboardTotal').textContent = total;
+            document.getElementById('dashboardCompliant').textContent = compliant;
+            document.getElementById('dashboardPartial').textContent = partial;
+            document.getElementById('dashboardNonCompliant').textContent = nonCompliant;
+
+            updateCharts();
+        }
+
+        function initCharts() {
+            // Initialize empty charts with proper colors
+            const isDarkMode = document.documentElement.classList.contains('dark-mode');
+            const textColor = isDarkMode ? '#B0B0B0' : '#666666';
+            const gridColor = isDarkMode ? '#404040' : '#E0E0E0';
+
+            const chartConfig = {
+                textColor,
+                gridColor,
+                primaryColor: '#0052CC',
+                successColor: '#2E7D32',
+                warningColor: '#F57C00',
+                dangerColor: '#C62828'
+            };
+
+            // Compliance Distribution Chart
+            const complianceCtx = document.getElementById('complianceChart');
+            if (complianceCtx) {
+                charts.compliance = new Chart(complianceCtx, {
+                    type: 'doughnut',
+                    data: { labels: ['Compliant', 'Warning', 'Critical'], datasets: [{ data: [0, 0, 0], backgroundColor: ['#2E7D32', '#F57C00', '#C62828'] }] },
+                    options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: textColor } } } }
+                });
+            }
+
+            // Department Chart
+            const deptCtx = document.getElementById('departmentChart');
+            if (deptCtx) {
+                charts.department = new Chart(deptCtx, {
+                    type: 'bar',
+                    data: { labels: [], datasets: [{ label: 'Compliance %', data: [], backgroundColor: '#0052CC' }] },
+                    options: { responsive: true, maintainAspectRatio: true, indexAxis: 'y', plugins: { legend: { labels: { color: textColor } } }, scales: { x: { ticks: { color: textColor }, grid: { color: gridColor } }, y: { ticks: { color: textColor } } } }
+                });
+            }
+
+            // Trend Chart
+            const trendCtx = document.getElementById('trendChart');
+            if (trendCtx) {
+                charts.trend = new Chart(trendCtx, {
+                    type: 'line',
+                    data: { labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], datasets: [{ label: 'Compliance %', data: [0, 0, 0, 0], borderColor: '#0052CC', backgroundColor: 'rgba(0, 82, 204, 0.1)', tension: 0.4 }] },
+                    options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: textColor } } }, scales: { y: { ticks: { color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor }, grid: { color: gridColor } } } }
+                });
+            }
+
+            // Principle Chart
+            const prinCtx = document.getElementById('principleChart');
+            if (prinCtx) {
+                charts.principle = new Chart(prinCtx, {
+                    type: 'bar',
+                    data: { labels: Object.values(principleDetails).map(p => p.name), datasets: [{ label: 'Met %', data: [0, 0, 0, 0, 0, 0], backgroundColor: '#0052CC' }] },
+                    options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: textColor } } }, scales: { y: { ticks: { color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor } } } }
+                });
+            }
+
+            // Calibration Chart
+            const calibCtx = document.getElementById('calibrationChart');
+            if (calibCtx) {
+                charts.calibration = new Chart(calibCtx, {
+                    type: 'doughnut',
+                    data: { labels: ['Current', 'Due Soon', 'Overdue'], datasets: [{ data: [0, 0, 0], backgroundColor: ['#2E7D32', '#F57C00', '#C62828'] }] },
+                    options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: textColor } } } }
+                });
+            }
+
+            // Score Distribution Chart
+            const scoreCtx = document.getElementById('scoreDistributionChart');
+            if (scoreCtx) {
+                charts.scoreDistribution = new Chart(scoreCtx, {
+                    type: 'line',
+                    data: { labels: ['0%', '16.7%', '33.3%', '50%', '66.7%', '83.3%', '100%'], datasets: [{ label: 'Equipment Count', data: [0, 0, 0, 0, 0, 0, 0], borderColor: '#0052CC', backgroundColor: 'rgba(0, 82, 204, 0.1)', tension: 0.4 }] },
+                    options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: textColor } } }, scales: { y: { ticks: { color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor }, grid: { color: gridColor } } } }
+                });
+            }
+        }
+
+        function updateCharts() {
+            if (equipment.length === 0) return;
+
+            const isDarkMode = document.documentElement.classList.contains('dark-mode');
+            const textColor = isDarkMode ? '#B0B0B0' : '#666666';
+
+            // Compliance Distribution
+            const compliant = equipment.filter(eq => eq.complianceScore === 100).length;
+            const warning = equipment.filter(eq => eq.complianceScore > 0 && eq.complianceScore < 100).length;
+            const critical = equipment.filter(eq => eq.complianceScore === 0).length;
+
+            if (charts.compliance) {
+                charts.compliance.data.datasets[0].data = [compliant, warning, critical];
+                charts.compliance.data.datasets[0].backgroundColor = ['#2E7D32', '#F57C00', '#C62828'];
+                charts.compliance.options.plugins.legend.labels.color = textColor;
+                charts.compliance.update();
+            }
+
+            // Department Chart
+            const departments = [...new Set(equipment.map(eq => eq.location))];
+            const deptCompliance = departments.map(dept => {
+                const deptEquipment = equipment.filter(eq => eq.location === dept);
+                const avg = deptEquipment.reduce((sum, eq) => sum + eq.complianceScore, 0) / deptEquipment.length;
+                return Math.round(avg);
+            });
+
+            if (charts.department) {
+                charts.department.data.labels = departments;
+                charts.department.data.datasets[0].data = deptCompliance;
+                charts.department.options.scales.x.ticks.color = textColor;
+                charts.department.options.scales.y.ticks.color = textColor;
+                charts.department.update();
+            }
+
+            // Principle Chart
+            const principleKeys = Object.keys(principleDetails);
+            const principleCounts = principleKeys.map(key => {
+                const count = equipment.filter(eq => eq.principles.includes(key)).length;
+                return Math.round((count / equipment.length) * 100);
+            });
+
+            if (charts.principle) {
+                charts.principle.data.datasets[0].data = principleCounts;
+                charts.principle.options.scales.x.ticks.color = textColor;
+                charts.principle.options.scales.y.ticks.color = textColor;
+                charts.principle.update();
+            }
+
+            // Calibration Chart
+            const today = new Date();
+            const soonDate = new Date();
+            soonDate.setDate(soonDate.getDate() + 30);
+
+            let current = 0, soon = 0, overdue = 0;
+            equipment.forEach(eq => {
+                if (eq.nextCalibration) {
+                    const dueDate = new Date(eq.nextCalibration);
+                    if (dueDate > today && dueDate <= soonDate) soon++;
+                    else if (dueDate > soonDate) current++;
+                    else overdue++;
+                }
+            });
+
+            if (charts.calibration) {
+                charts.calibration.data.datasets[0].data = [current, soon, overdue];
+                charts.calibration.update();
+            }
+
+            // Update Analytics Table
+            updateAnalyticsTable();
+        }
+
+        function updateAnalyticsTable() {
+            if (equipment.length === 0) return;
+
+            const tbody = document.getElementById('analyticsTableBody');
+            const total = equipment.length;
+            const compliant = equipment.filter(eq => eq.complianceScore === 100).length;
+            const partial = equipment.filter(eq => eq.complianceScore > 0 && eq.complianceScore < 100).length;
+            const nonCompliant = equipment.filter(eq => eq.complianceScore === 0).length;
+            const avg = Math.round(equipment.reduce((sum, eq) => sum + eq.complianceScore, 0) / total);
+
+            tbody.innerHTML = `
+                <tr><td><strong>Total Equipment</strong></td><td style="text-align: right;">${total}</td><td style="text-align: right;">100%</td></tr>
+                <tr><td><strong>Fully Compliant</strong></td><td style="text-align: right;">${compliant}</td><td style="text-align: right;">${Math.round((compliant/total)*100)}%</td></tr>
+                <tr><td><strong>Partial Compliance</strong></td><td style="text-align: right;">${partial}</td><td style="text-align: right;">${Math.round((partial/total)*100)}%</td></tr>
+                <tr><td><strong>Non-Compliant</strong></td><td style="text-align: right;">${nonCompliant}</td><td style="text-align: right;">${Math.round((nonCompliant/total)*100)}%</td></tr>
+                <tr><td><strong>Average Compliance Score</strong></td><td style="text-align: right;">${avg}%</td><td style="text-align: right;">-</td></tr>
+            `;
+        }
+
+        // ==================== AUDIT TRAIL ====================
+        function addAuditEntry(action, data, changes) {
+            auditTrail.push({
+                timestamp: new Date().toISOString(),
+                action,
+                equipmentId: data.equipmentId,
+                equipmentName: data.equipmentName,
+                user: 'Current User',
+                changes
+            });
+            updateAuditTrail();
+        }
+
+        function updateAuditTrail() {
+            const container = document.getElementById('auditTrailContainer');
+            const emptyState = document.getElementById('auditEmptyState');
+
+            if (auditTrail.length === 0) {
+                container.classList.add('hidden');
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            container.classList.remove('hidden');
+            emptyState.style.display = 'none';
+
+            container.innerHTML = auditTrail.slice().reverse().map((entry, idx) => `
+                <div class="equipment-item" style="border-left: 4px solid var(--info-color); padding: var(--spacing-md);">
+                    <div class="equipment-info">
+                        <div class="equipment-id">${entry.action}</div>
+                        <div class="equipment-name">${entry.equipmentId} - ${entry.equipmentName}</div>
+                        <div class="equipment-meta">
+                            👤 ${entry.user} | ${new Date(entry.timestamp).toLocaleString()}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function exportAuditTrail() {
+            if (auditTrail.length === 0) {
+                showToast('No audit entries to export', 'error');
+                return;
+            }
+
+            const report = {
+                timestamp: new Date().toISOString(),
+                organization: "Eli Lilly",
+                auditTrail: auditTrail
+            };
+
+            downloadJSON(report, `Audit_Trail_${new Date().toISOString().split('T')[0]}.json`);
+            showToast('Audit trail exported successfully', 'success');
+        }
+
+        // ==================== UTILITIES ====================
+        function getComplianceStatus(score) {
+            if (score === 100) return 'compliant';
+            if (score >= 50) return 'warning';
+            return 'critical';
+        }
+
+        function getStatusClass(status) {
+            return `status-${status}`;
+        }
+
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function updateAllViews() {
+            updateEquipmentRegistry();
+            updateDashboard();
+            updateAuditTrail();
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div class="toast-message">${message}</div>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 5000);
+        }
+
+        function downloadJSON(data, filename) {
+            const dataStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        // ==================== SAMPLE DATA ====================
+        function loadSampleData() {
+            equipment = [
+                {
+                    id: Date.now(),
+                    equipmentId: 'EQ-2024-001',
+                    equipmentName: 'Analytical Balance',
+                    manufacturer: 'Mettler-Toledo',
+                    serialNumber: 'SN-MT-987654',
+                    location: 'Laboratory A',
+                    lastCalibration: '2024-08-15',
+                    nextCalibration: '2025-08-15',
+                    owner: 'Dr. Sarah Johnson',
+                    metadata: 'Class I balance, GLP calibrated',
+                    principles: ['attributable', 'legible', 'contemporaneous', 'original', 'accurate', 'plus'],
+                    complianceScore: 100,
+                    timestamp: new Date().toISOString(),
+                    status: 'compliant'
+                },
+                {
+                    id: Date.now() + 1,
+                    equipmentId: 'EQ-2024-002',
+                    equipmentName: 'pH Meter',
+                    manufacturer: 'Hach',
+                    serialNumber: 'SN-HC-456789',
+                    location: 'Chemistry Lab',
+                    lastCalibration: '2024-07-20',
+                    nextCalibration: '2025-01-20',
+                    owner: 'Dr. Michael Chen',
+                    metadata: 'Benchtop model, 2-point calibration',
+                    principles: ['attributable', 'legible', 'accurate'],
+                    complianceScore: 50,
+                    timestamp: new Date().toISOString(),
+                    status: 'warning'
+                },
+                {
+                    id: Date.now() + 2,
+                    equipmentId: 'EQ-2024-003',
+                    equipmentName: 'HPLC System',
+                    manufacturer: 'Shimadzu',
+                    serialNumber: 'SN-SZ-123456',
+                    location: 'Laboratory A',
+                    lastCalibration: '2024-06-10',
+                    nextCalibration: '2024-12-10',
+                    owner: 'Dr. Emily Rodriguez',
+                    metadata: 'LC-20AD, fully automated',
+                    principles: ['attributable', 'legible', 'contemporaneous', 'original'],
+                    complianceScore: 66.67,
+                    timestamp: new Date().toISOString(),
+                    status: 'warning'
+                },
+                {
+                    id: Date.now() + 3,
+                    equipmentId: 'EQ-2024-004',
+                    equipmentName: 'Thermometer',
+                    manufacturer: 'Fisher',
+                    serialNumber: 'SN-FS-789012',
+                    location: 'QA Lab',
+                    lastCalibration: '2024-09-01',
+                    nextCalibration: '2025-09-01',
+                    owner: 'Dr. James Wilson',
+                    metadata: 'Digital thermometer, ±0.5°C accuracy',
+                    principles: ['attributable', 'legible'],
+                    complianceScore: 33.33,
+                    timestamp: new Date().toISOString(),
+                    status: 'critical'
+                }
+            ];
+
+            auditTrail = equipment.map(eq => ({
+                timestamp: eq.timestamp,
+                action: 'CREATED',
+                equipmentId: eq.equipmentId,
+                equipmentName: eq.equipmentName,
+                user: 'System'
+            }));
+
+            updateAllViews();
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal.show');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALCOA+ Equipment Metadata Integrity Dashboard - Eli Lilly</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.95em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .alcoa-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .alcoa-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .alcoa-item {
+            padding: 12px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .alcoa-item.unchecked {
+            background: #f0f0f0;
+            color: #888;
+            border: 2px solid #ddd;
+        }
+
+        .alcoa-item.checked {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            color: white;
+            border: 2px solid #6dd5ed;
+        }
+
+        .compliance-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+
+        .compliance-badge.compliant {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .compliance-badge.non-compliant {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: 700;
+            color: white;
+            margin: 20px auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .assessment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .assessment-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .assessment-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .assessment-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-badge.pass {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-badge.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .equipment-list {
+            list-style: none;
+        }
+
+        .equipment-item {
+            background: #f9f9f9;
+            padding: 12px;
+            margin: 8px 0;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .equipment-item:hover {
+            background: #efefef;
+            transform: translateX(5px);
+        }
+
+        .equipment-item.selected {
+            background: #e8eaf6;
+            border-left-color: #764ba2;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: auto;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #333;
+            transform: none;
+        }
+
+        .principle-description {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .principle-description h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .summary-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .summary-item h3 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .summary-item p {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .export-btn {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚙️ ALCOA+ Equipment Metadata Integrity Dashboard</h1>
+            <p>Eli Lilly - Equipment Compliance Assessment Platform</p>
+        </div>
+
+        <div class="main-grid">
+            <!-- Input Card -->
+            <div class="card">
+                <h2>📝 Equipment Metadata Entry</h2>
+                <div class="form-group">
+                    <label for="equipmentId">Equipment ID *</label>
+                    <input type="text" id="equipmentId" placeholder="e.g., EQ-2024-001" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="equipmentName">Equipment Name *</label>
+                    <input type="text" id="equipmentName" placeholder="e.g., Analytical Balance" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="manufacturer">Manufacturer</label>
+                    <input type="text" id="manufacturer" placeholder="e.g., Mettler-Toledo">
+                </div>
+
+                <div class="form-group">
+                    <label for="serialNumber">Serial Number</label>
+                    <input type="text" id="serialNumber" placeholder="e.g., SN-987654">
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Location/Department *</label>
+                    <input type="text" id="location" placeholder="e.g., Laboratory A, Building 5" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastCalibration">Last Calibration Date</label>
+                    <input type="date" id="lastCalibration">
+                </div>
+
+                <div class="form-group">
+                    <label for="nextCalibration">Next Calibration Due</label>
+                    <input type="date" id="nextCalibration">
+                </div>
+
+                <div class="form-group">
+                    <label for="owner">Owner/Responsible Person</label>
+                    <input type="text" id="owner" placeholder="e.g., Dr. John Smith">
+                </div>
+
+                <div class="form-group">
+                    <label for="metadata">Additional Metadata</label>
+                    <textarea id="metadata" placeholder="Any additional information..."></textarea>
+                </div>
+
+                <button onclick="addEquipment()">Add Equipment</button>
+            </div>
+
+            <!-- Assessment Card -->
+            <div class="card">
+                <h2>✅ ALCOA+ Principles Assessment</h2>
+                <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">Select which ALCOA+ principles are met:</p>
+
+                <div class="alcoa-grid">
+                    <div class="alcoa-item unchecked" onclick="togglePrinciple(this, 'attributable')">
+                        <div>📋 Attributable</div>
+                        <div style="font-size: 0.8em; margin-top: 5px;">User/Time logged</div>
+                    </div>
+                    <div class="alcoa-item unchecked" onclick="togglePrinciple(this, 'legible')">
+                        <div>👁️ Legible</div>
+                        <div style="font-size: 0.8em; margin-top: 5px;">Clearly readable</div>
+                    </div>
+                    <div class="alcoa-item unchecked" onclick="togglePrinciple(this, 'contemporaneous')">
+                        <div>⏰ Contemporaneous</div>
+                        <div style="font-size: 0.8em; margin-top: 5px;">Recorded at time</div>
+                    </div>
+                    <div class="alcoa-item unchecked" onclick="togglePrinciple(this, 'original')">
+                        <div>📄 Original</div>
+                        <div style="font-size: 0.8em; margin-top: 5px;">First occurrence</div>
+                    </div>
+                    <div class="alcoa-item unchecked" onclick="togglePrinciple(this, 'accurate')">
+                        <div>🎯 Accurate</div>
+                        <div style="font-size: 0.8em; margin-top: 5px;">Correct & verified</div>
+                    </div>
+                    <div class="alcoa-item unchecked" onclick="togglePrinciple(this, 'plus')">
+                        <div>➕ ALCOA+</div>
+                        <div style="font-size: 0.8em; margin-top: 5px;">Complete & Consistent</div>
+                    </div>
+                </div>
+
+                <button onclick="assessCompliance()" style="width: 100%; margin-top: 20px;">Assess Compliance</button>
+
+                <div id="complianceResult" style="margin-top: 20px; display: none;">
+                    <div class="score-circle" id="scoreCircle">0%</div>
+                    <div id="complianceBadges" style="text-align: center;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Equipment List -->
+        <div class="card full-width">
+            <h2>📊 Equipment Registry</h2>
+            <div id="equipmentListContainer" style="display: none;">
+                <ul class="equipment-list" id="equipmentList"></ul>
+            </div>
+            <div id="emptyMessage" style="text-align: center; color: #999; padding: 40px 0;">
+                <p>No equipment added yet. Add equipment to begin assessment.</p>
+            </div>
+        </div>
+
+        <!-- Assessment Summary -->
+        <div class="card full-width" id="summaryCard" style="display: none;">
+            <h2>📈 Dashboard Summary</h2>
+            <div class="assessment-table">
+                <table id="summaryTable">
+                    <thead>
+                        <tr>
+                            <th>Equipment ID</th>
+                            <th>Equipment Name</th>
+                            <th>Location</th>
+                            <th>ALCOA+ Compliance</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryTableBody"></tbody>
+                </table>
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <h3 id="totalEquipment">0</h3>
+                    <p>Total Equipment</p>
+                </div>
+                <div class="summary-item">
+                    <h3 id="compliantCount">0</h3>
+                    <p>Compliant</p>
+                </div>
+                <div class="summary-item">
+                    <h3 id="compliancePercentage">0%</h3>
+                    <p>Overall Compliance</p>
+                </div>
+            </div>
+
+            <button class="export-btn" onclick="exportData()">📥 Export Report to JSON</button>
+        </div>
+    </div>
+
+    <!-- Modal for Principle Details -->
+    <div id="principleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">ALCOA+ Principle</h3>
+                <button class="close-btn" onclick="closePrincipleModal()">&times;</button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        let equipment = [];
+        let selectedPrinciples = new Set();
+
+        const principleDetails = {
+            attributable: {
+                name: "Attributable",
+                description: "Who performed the action and when",
+                details: "All data entries must be attributable to a specific individual with a unique identifier. Each action should be traceable to the person who performed it with a timestamp."
+            },
+            legible: {
+                name: "Legible",
+                description: "Easily readable and understandable",
+                details: "All metadata must be clearly written, printed, or electronically recorded in a manner that is easily readable. Font sizes, formats, and clarity must allow for easy interpretation."
+            },
+            contemporaneous: {
+                name: "Contemporaneous",
+                description: "Recorded at the time of the event",
+                details: "Metadata must be recorded at the time the event occurs, not at a later date. This ensures accuracy and prevents memory loss or bias from delayed recording."
+            },
+            original: {
+                name: "Original",
+                description: "First occurrence of the record",
+                details: "The original record must be maintained and preserved. Copies should be clearly identified as copies, and the original must be retained and protected."
+            },
+            accurate: {
+                name: "Accurate",
+                description: "Correct and verified information",
+                details: "All metadata must be accurate and verified for correctness. Double-checking procedures and validation protocols should be in place to ensure accuracy."
+            },
+            plus: {
+                name: "ALCOA+",
+                description: "Complete and Consistent information",
+                details: "In addition to ALCOA, data must be complete (all required fields filled) and consistent (uniform format and terminology throughout all records)."
+            }
+        };
+
+        function togglePrinciple(element, principle) {
+            element.classList.toggle('unchecked');
+            element.classList.toggle('checked');
+
+            if (selectedPrinciples.has(principle)) {
+                selectedPrinciples.delete(principle);
+            } else {
+                selectedPrinciples.add(principle);
+            }
+        }
+
+        function showPrincipleDetails(principle) {
+            const details = principleDetails[principle];
+            document.getElementById('modalTitle').textContent = details.name;
+            document.getElementById('modalBody').innerHTML = `
+                <div class="principle-description">
+                    <h4>${details.name}</h4>
+                    <p>${details.description}</p>
+                </div>
+                <p style="line-height: 1.6; color: #666;">${details.details}</p>
+            `;
+            document.getElementById('principleModal').classList.add('show');
+        }
+
+        function closePrincipleModal() {
+            document.getElementById('principleModal').classList.remove('show');
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('principleModal');
+            if (event.target === modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        function addEquipment() {
+            const equipmentId = document.getElementById('equipmentId').value;
+            const equipmentName = document.getElementById('equipmentName').value;
+            const manufacturer = document.getElementById('manufacturer').value;
+            const serialNumber = document.getElementById('serialNumber').value;
+            const location = document.getElementById('location').value;
+            const lastCalibration = document.getElementById('lastCalibration').value;
+            const nextCalibration = document.getElementById('nextCalibration').value;
+            const owner = document.getElementById('owner').value;
+            const metadata = document.getElementById('metadata').value;
+
+            if (!equipmentId || !equipmentName || !location) {
+                alert('Please fill in all required fields (marked with *)');
+                return;
+            }
+
+            const equipmentEntry = {
+                id: Date.now(),
+                equipmentId,
+                equipmentName,
+                manufacturer,
+                serialNumber,
+                location,
+                lastCalibration,
+                nextCalibration,
+                owner,
+                metadata,
+                principles: Array.from(selectedPrinciples),
+                complianceScore: calculateComplianceScore(selectedPrinciples),
+                timestamp: new Date().toISOString()
+            };
+
+            equipment.push(equipmentEntry);
+            clearForm();
+            updateEquipmentList();
+            updateSummary();
+        }
+
+        function calculateComplianceScore(principles) {
+            return (principles.size / 6) * 100;
+        }
+
+        function clearForm() {
+            document.getElementById('equipmentId').value = '';
+            document.getElementById('equipmentName').value = '';
+            document.getElementById('manufacturer').value = '';
+            document.getElementById('serialNumber').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('lastCalibration').value = '';
+            document.getElementById('nextCalibration').value = '';
+            document.getElementById('owner').value = '';
+            document.getElementById('metadata').value = '';
+
+            selectedPrinciples.clear();
+            document.querySelectorAll('.alcoa-item').forEach(item => {
+                item.classList.remove('checked');
+                item.classList.add('unchecked');
+            });
+
+            document.getElementById('complianceResult').style.display = 'none';
+        }
+
+        function assessCompliance() {
+            if (selectedPrinciples.size === 0) {
+                alert('Please select at least one ALCOA+ principle');
+                return;
+            }
+
+            const score = calculateComplianceScore(selectedPrinciples);
+            const scoreCircle = document.getElementById('scoreCircle');
+            scoreCircle.textContent = Math.round(score) + '%';
+
+            const badgesContainer = document.getElementById('complianceBadges');
+            badgesContainer.innerHTML = '';
+
+            selectedPrinciples.forEach(principle => {
+                const badge = document.createElement('span');
+                badge.className = 'compliance-badge compliant';
+                badge.textContent = principleDetails[principle].name;
+                badgesContainer.appendChild(badge);
+            });
+
+            const missingCount = 6 - selectedPrinciples.size;
+            if (missingCount > 0) {
+                const badge = document.createElement('span');
+                badge.className = 'compliance-badge non-compliant';
+                badge.textContent = `${missingCount} Principles Not Met`;
+                badgesContainer.appendChild(badge);
+            }
+
+            document.getElementById('complianceResult').style.display = 'block';
+        }
+
+        function updateEquipmentList() {
+            const container = document.getElementById('equipmentListContainer');
+            const emptyMessage = document.getElementById('emptyMessage');
+            const list = document.getElementById('equipmentList');
+
+            if (equipment.length === 0) {
+                container.style.display = 'none';
+                emptyMessage.style.display = 'block';
+                return;
+            }
+
+            container.style.display = 'block';
+            emptyMessage.style.display = 'none';
+
+            list.innerHTML = equipment.map((eq, index) => `
+                <li class="equipment-item" onclick="selectEquipment(${index})">
+                    <strong>${eq.equipmentId}</strong> - ${eq.equipmentName}
+                    <div style="font-size: 0.85em; color: #666; margin-top: 5px;">
+                        📍 ${eq.location} | Compliance: ${Math.round(eq.complianceScore)}%
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        function updateSummary() {
+            const summaryCard = document.getElementById('summaryCard');
+            const totalCount = equipment.length;
+
+            if (totalCount === 0) {
+                summaryCard.style.display = 'none';
+                return;
+            }
+
+            summaryCard.style.display = 'block';
+
+            const compliantCount = equipment.filter(eq => eq.complianceScore === 100).length;
+            const overallCompliance = totalCount > 0 ?
+                Math.round((equipment.reduce((sum, eq) => sum + eq.complianceScore, 0) / totalCount)) : 0;
+
+            document.getElementById('totalEquipment').textContent = totalCount;
+            document.getElementById('compliantCount').textContent = compliantCount;
+            document.getElementById('compliancePercentage').textContent = overallCompliance + '%';
+
+            const tableBody = document.getElementById('summaryTableBody');
+            tableBody.innerHTML = equipment.map(eq => {
+                const status = eq.complianceScore === 100 ? 'pass' : (eq.complianceScore >= 66 ? 'warning' : 'fail');
+                return `
+                    <tr>
+                        <td><strong>${eq.equipmentId}</strong></td>
+                        <td>${eq.equipmentName}</td>
+                        <td>${eq.location}</td>
+                        <td>${eq.principles.length}/6 principles</td>
+                        <td><span class="status-badge ${status}">${Math.round(eq.complianceScore)}%</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function selectEquipment(index) {
+            // Highlight selected equipment
+            document.querySelectorAll('.equipment-item').forEach((item, i) => {
+                item.classList.toggle('selected', i === index);
+            });
+        }
+
+        function exportData() {
+            const report = {
+                timestamp: new Date().toISOString(),
+                organization: "Eli Lilly",
+                dashboard: "ALCOA+ Equipment Metadata Integrity",
+                summary: {
+                    totalEquipment: equipment.length,
+                    compliantCount: equipment.filter(eq => eq.complianceScore === 100).length,
+                    overallCompliance: equipment.length > 0 ?
+                        Math.round((equipment.reduce((sum, eq) => sum + eq.complianceScore, 0) / equipment.length)) : 0
+                },
+                equipment: equipment
+            };
+
+            const dataStr = JSON.stringify(report, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `ALCOA_Report_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        // Sample data for demonstration
+        function loadSampleData() {
+            const sampleEquipment = [
+                {
+                    id: Date.now(),
+                    equipmentId: 'EQ-2024-001',
+                    equipmentName: 'Analytical Balance',
+                    manufacturer: 'Mettler-Toledo',
+                    serialNumber: 'SN-MT-987654',
+                    location: 'Laboratory A, Building 5',
+                    lastCalibration: '2024-08-15',
+                    nextCalibration: '2025-08-15',
+                    owner: 'Dr. Sarah Johnson',
+                    metadata: 'Class I balance, GLP calibrated',
+                    principles: ['attributable', 'legible', 'contemporaneous', 'original', 'accurate', 'plus'],
+                    complianceScore: 100,
+                    timestamp: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 1,
+                    equipmentId: 'EQ-2024-002',
+                    equipmentName: 'pH Meter',
+                    manufacturer: 'Hach',
+                    serialNumber: 'SN-HC-456789',
+                    location: 'Chemistry Lab, Building 3',
+                    lastCalibration: '2024-07-20',
+                    nextCalibration: '2025-01-20',
+                    owner: 'Dr. Michael Chen',
+                    metadata: 'Benchtop model, 2-point calibration',
+                    principles: ['attributable', 'legible', 'accurate'],
+                    complianceScore: 50,
+                    timestamp: new Date().toISOString()
+                }
+            ];
+
+            equipment = sampleEquipment;
+            updateEquipmentList();
+            updateSummary();
+        }
+
+        // Load sample data on page load
+        window.addEventListener('load', loadSampleData);
+    </script>
+</body>
+</html>

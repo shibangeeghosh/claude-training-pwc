@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALCOA+ Data Integrity Framework | Eli Lilly Operations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 12px;
+            padding: 50px 40px;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            text-align: center;
+            border-top: 4px solid #667eea;
+        }
+
+        header h1 {
+            color: #667eea;
+            font-size: 2.8em;
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        header .subtitle {
+            color: #555;
+            font-size: 1.15em;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        header .company {
+            color: #764ba2;
+            font-weight: 600;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .intro-section {
+            background: white;
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 35px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        }
+
+        .intro-section h2 {
+            color: #667eea;
+            margin-bottom: 18px;
+            font-size: 1.6em;
+            font-weight: 600;
+        }
+
+        .intro-section p {
+            color: #555;
+            line-height: 1.85;
+            margin-bottom: 12px;
+            font-size: 1.05em;
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 22px;
+            margin-bottom: 35px;
+        }
+
+        .principle-card {
+            background: white;
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 5px solid #667eea;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .principle-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+
+        .principle-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+        }
+
+        .principle-card.plus {
+            border-left-color: #764ba2;
+        }
+
+        .principle-card.plus::before {
+            background: rgba(118, 75, 162, 0.05);
+        }
+
+        .principle-card h3 {
+            color: #667eea;
+            font-size: 1.5em;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .principle-card.plus h3 {
+            color: #764ba2;
+        }
+
+        .principle-icon {
+            font-size: 2em;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .principle-card.plus .principle-icon {
+            background: rgba(118, 75, 162, 0.1);
+        }
+
+        .principle-card .definition {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 16px;
+            font-size: 1em;
+            font-weight: 500;
+            padding: 12px;
+            background: #f8f9ff;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+
+        .principle-card.plus .definition {
+            background: #faf8ff;
+            border-left-color: #764ba2;
+        }
+
+        .principle-card .details {
+            color: #555;
+            line-height: 1.7;
+            font-size: 0.95em;
+        }
+
+        .principle-card .checklist {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid #eee;
+        }
+
+        .principle-card .checklist li {
+            color: #555;
+            margin-left: 24px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            transition: color 0.2s ease;
+        }
+
+        .principle-card .checklist li:before {
+            content: '✓ ';
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 4px;
+        }
+
+        .principle-card.plus .checklist li:before {
+            color: #764ba2;
+        }
+
+        .checklist-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .principle-card.plus .checklist-title {
+            color: #764ba2;
+        }
+
+        .compliance-section {
+            background: white;
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 35px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        }
+
+        .compliance-section h2 {
+            color: #667eea;
+            margin-bottom: 24px;
+            font-size: 1.6em;
+            font-weight: 600;
+        }
+
+        .compliance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .compliance-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .compliance-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .compliance-table tr:hover {
+            background-color: #f8f9ff;
+            transition: background-color 0.2s ease;
+        }
+
+        .resource-section {
+            background: white;
+            border-radius: 12px;
+            padding: 35px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        }
+
+        .resource-section h2 {
+            color: #667eea;
+            margin-bottom: 24px;
+            font-size: 1.6em;
+            font-weight: 600;
+        }
+
+        .resource-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        .resource-item {
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .resource-item:hover {
+            background: #f0f4ff;
+            transform: translateX(4px);
+        }
+
+        .resource-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        .resource-item p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        footer {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            color: #666;
+            margin-top: 35px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            border-bottom: 3px solid #667eea;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 35px 25px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .principles-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .compliance-table {
+                font-size: 0.85em;
+            }
+
+            .compliance-table th, .compliance-table td {
+                padding: 12px 10px;
+            }
+
+            .toggle-btn {
+                padding: 7px 12px;
+                font-size: 0.8em;
+                margin-top: -30px;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            margin-right: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge.core {
+            background: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .badge.plus {
+            background: #764ba2;
+            box-shadow: 0 2px 8px rgba(118, 75, 162, 0.3);
+        }
+
+        .dashboard-section {
+            background: white;
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 35px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        }
+
+        .dashboard-section h2 {
+            color: #667eea;
+            margin-bottom: 24px;
+            font-size: 1.6em;
+            font-weight: 600;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 26px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.25);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(102, 126, 234, 0.35);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            pointer-events: none;
+        }
+
+        .metric-value {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .metric-label {
+            font-size: 0.85em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .toggle-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+            float: right;
+            margin-top: -38px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+            position: relative;
+            z-index: 10;
+        }
+
+        .principle-card.plus .toggle-btn {
+            background: #764ba2;
+            box-shadow: 0 4px 12px rgba(118, 75, 162, 0.25);
+        }
+
+        .toggle-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.06);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.35);
+        }
+
+        .toggle-btn:active {
+            transform: scale(0.98);
+        }
+
+        .test-data {
+            display: none;
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 2px solid #667eea;
+        }
+
+        .principle-card.plus .test-data {
+            border-top-color: #764ba2;
+        }
+
+        .test-data.visible {
+            display: block;
+            animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .test-data h4 {
+            color: #667eea;
+            margin-bottom: 14px;
+            font-size: 1.05em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .principle-card.plus .test-data h4 {
+            color: #764ba2;
+        }
+
+        .test-data-item {
+            background: #f9fafb;
+            padding: 14px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+            border-radius: 6px;
+            font-size: 0.9em;
+            line-height: 1.6;
+            transition: all 0.2s ease;
+        }
+
+        .test-data-item:hover {
+            background: #f0f4ff;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+        }
+
+        .principle-card.plus .test-data-item {
+            border-left-color: #764ba2;
+        }
+
+        .principle-card.plus .test-data-item:hover {
+            background: #faf8ff;
+        }
+
+        .test-data-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .principle-card.plus .test-data-item strong {
+            color: #764ba2;
+        }
+
+        .selected-data-display {
+            background: linear-gradient(135deg, #f8f9ff 0%, #faf8ff 100%);
+            border-radius: 10px;
+            padding: 24px;
+            margin-top: 18px;
+            border: 2px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .selected-data-display.has-data {
+            border-color: #764ba2;
+            background: linear-gradient(135deg, #f0f4ff 0%, #f5f0ff 100%);
+        }
+
+        .selected-data-display h3 {
+            color: #667eea;
+            margin-bottom: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .selected-data-display.has-data h3 {
+            color: #764ba2;
+        }
+
+        .data-item {
+            background: white;
+            padding: 14px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .data-item:hover {
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            transform: translateX(2px);
+        }
+
+        .data-item .principle-name {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 6px;
+            font-size: 1.05em;
+        }
+
+        .data-item .data-content {
+            color: #555;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .data-item .data-content strong {
+            color: #667eea;
+        }
+
+        .no-selection {
+            color: #999;
+            font-style: italic;
+            text-align: center;
+            padding: 32px 20px;
+            background: white;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ALCOA+ Framework</h1>
+            <p class="subtitle">Data Integrity Principles for Regulated Operations</p>
+            <p class="company">Eli Lilly Operations Team</p>
+        </header>
+
+        <div class="intro-section">
+            <h2>What is ALCOA+?</h2>
+            <p>ALCOA+ is the industry standard for data integrity in regulated environments, particularly in pharmaceutical operations. It ensures that all data generated, recorded, and maintained meets strict quality and compliance requirements.</p>
+            <p>ALCOA+ consists of five core principles (ALCOA) plus four additional dimensions (+) that together create a comprehensive data integrity framework.</p>
+        </div>
+
+        <div class="dashboard-section">
+            <h2>📊 Compliance Dashboard</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="selected-count">0</div>
+                    <div class="metric-label">Principles Selected</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="compliance-rate">0%</div>
+                    <div class="metric-label">Compliance Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="records-reviewed">0</div>
+                    <div class="metric-label">Test Records</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="audit-status">✓</div>
+                    <div class="metric-label">Audit Status</div>
+                </div>
+            </div>
+            <div class="selected-data-display" id="selected-data-display">
+                <h3>Selected Test Data</h3>
+                <div class="no-selection">Select a principle to view test data</div>
+            </div>
+        </div>
+
+        <div class="principles-grid">
+            <!-- Core ALCOA Principles -->
+            <div class="principle-card" data-principle="Attributable">
+                <button class="toggle-btn" onclick="toggleTestData(this)">View Test Data</button>
+                <h3><span class="principle-icon">✍️</span> Attributable <span class="badge core">CORE</span></h3>
+                <p class="definition">"Who did what, when, and why?"</p>
+                <p class="details">Every action, data entry, and modification must be traceable to the individual who performed it, with clear identification of timing and reason.</p>
+                <div class="checklist">
+                    <div class="checklist-title">Key Practices:</div>
+                    <ul>
+                        <li>User identification and authentication</li>
+                        <li>Electronic signatures (eSignatures)</li>
+                        <li>Timestamps for all entries</li>
+                        <li>Audit trails documenting changes</li>
+                    </ul>
+                </div>
+                <div class="test-data">
+                    <h4>📋 Test Data Samples:</h4>
+                    <div class="test-data-item">
+                        <strong>Batch #BT-2026-08-001</strong>
+                        User: Sarah Johnson (sjohnson) | Time: 2026-08-29 09:15:47 UTC | Action: Created batch record | Reason: Routine manufacturing
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Amendment #1</strong>
+                        User: Michael Chen (mchen) | Time: 2026-08-29 10:32:15 UTC | Action: Corrected pH value | Reason: Data entry error - original value 6.2, corrected to 6.8
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Sign-off</strong>
+                        User: Dr. Lisa Wang (lwang) | Time: 2026-08-29 14:00:00 UTC | Action: Reviewed and approved | Reason: QA verification complete
+                    </div>
+                </div>
+            </div>
+
+            <div class="principle-card" data-principle="Legible">
+                <button class="toggle-btn" onclick="toggleTestData(this)">View Test Data</button>
+                <h3><span class="principle-icon">📖</span> Legible <span class="badge core">CORE</span></h3>
+                <p class="definition">"Can it be read and understood?"</p>
+                <p class="details">All data must be clear, readable, and understandable. Handwritten entries should be legible; electronic data must be in accessible formats.</p>
+                <div class="checklist">
+                    <div class="checklist-title">Key Practices:</div>
+                    <ul>
+                        <li>Clear handwriting or printed text</li>
+                        <li>Standard units and terminology</li>
+                        <li>Proper formatting and labeling</li>
+                        <li>Accessible file formats</li>
+                    </ul>
+                </div>
+                <div class="test-data">
+                    <h4>📋 Test Data Samples:</h4>
+                    <div class="test-data-item">
+                        <strong>Temperature Reading</strong>
+                        Value: 23.5°C | Units: Celsius | Format: PDF | Status: ✓ Clearly readable, standardized format
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Weight Measurement</strong>
+                        Value: 500.25 mg | Units: Milligrams | Precision: 0.01 mg | Status: ✓ Machine-readable, electronic format
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Concentration Result</strong>
+                        Value: 98.5% | Standard: USP | Documentation: Complete terminology used | Status: ✓ Industry standard language
+                    </div>
+                </div>
+            </div>
+
+            <div class="principle-card" data-principle="Contemporaneous">
+                <button class="toggle-btn" onclick="toggleTestData(this)">View Test Data</button>
+                <h3><span class="principle-icon">⏰</span> Contemporaneous <span class="badge core">CORE</span></h3>
+                <p class="definition">"Was it recorded at the time of the event?"</p>
+                <p class="details">Data must be recorded at the time an activity occurs, not retrospectively or reconstructed later.</p>
+                <div class="checklist">
+                    <div class="checklist-title">Key Practices:</div>
+                    <ul>
+                        <li>Real-time data entry</li>
+                        <li>Synchronization with activities</li>
+                        <li>No backdating or delayed entries</li>
+                        <li>Immediate documentation of events</li>
+                    </ul>
+                </div>
+                <div class="test-data">
+                    <h4>📋 Test Data Samples:</h4>
+                    <div class="test-data-item">
+                        <strong>Activity: Equipment Sterilization</strong>
+                        Activity Time: 09:30:00 | Entry Time: 09:30:15 | Variance: 15 seconds | Status: ✓ PASS - Real-time entry
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Activity: Sample Analysis</strong>
+                        Activity Time: 14:00:00 | Entry Time: 14:00:45 | Variance: 45 seconds | Status: ✓ PASS - Immediate documentation
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Activity: Batch Completion</strong>
+                        Activity Time: 16:15:00 | Entry Time: 17:20:00 | Variance: 1 hour 5 min | Status: ✗ FAIL - Delayed entry (unacceptable)
+                    </div>
+                </div>
+            </div>
+
+            <div class="principle-card" data-principle="Original">
+                <button class="toggle-btn" onclick="toggleTestData(this)">View Test Data</button>
+                <h3><span class="principle-icon">📋</span> Original <span class="badge core">CORE</span></h3>
+                <p class="definition">"Is this the first, official record?"</p>
+                <p class="details">Data should exist in its original, first-recorded form. Copies must be clearly identified as such.</p>
+                <div class="checklist">
+                    <div class="checklist-title">Key Practices:</div>
+                    <ul>
+                        <li>Preserve original records</li>
+                        <li>Document data copies and transfers</li>
+                        <li>Maintain data lineage</li>
+                        <li>Archive original media safely</li>
+                    </ul>
+                </div>
+                <div class="test-data">
+                    <h4>📋 Test Data Samples:</h4>
+                    <div class="test-data-item">
+                        <strong>Original Record: Batch_2026_08_001.raw</strong>
+                        Status: Original | Format: Raw instrument output | Archived: Yes | Checksum: A7F3C2E91B6D | Chain of custody: Documented
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Copy: Batch_2026_08_001_COPY_QA.pdf</strong>
+                        Status: Certified Copy | Original Reference: Batch_2026_08_001.raw | Copy Date: 2026-08-29 15:30:00 | Status: ✓ Clearly identified as copy
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Transfer Record</strong>
+                        From: Instrument Storage (Primary) | To: Archive Storage (Secondary) | Transfer Date: 2026-08-29 | Verified By: Dr. Lisa Wang | Status: ✓ Transfer documented
+                    </div>
+                </div>
+            </div>
+
+            <div class="principle-card" data-principle="Accurate">
+                <button class="toggle-btn" onclick="toggleTestData(this)">View Test Data</button>
+                <h3><span class="principle-icon">✓</span> Accurate <span class="badge core">CORE</span></h3>
+                <p class="definition">"Is the data correct and true?"</p>
+                <p class="details">All data must be accurate, complete, and reflect actual events or measurements with no errors or omissions.</p>
+                <div class="checklist">
+                    <div class="checklist-title">Key Practices:</div>
+                    <ul>
+                        <li>Data validation and verification</li>
+                        <li>Calibration of instruments</li>
+                        <li>Quality control checks</li>
+                        <li>Error correction procedures</li>
+                    </ul>
+                </div>
+                <div class="test-data">
+                    <h4>📋 Test Data Samples:</h4>
+                    <div class="test-data-item">
+                        <strong>Instrument Calibration</strong>
+                        Instrument: pH Meter Model pH-100 | Last Calibration: 2026-08-15 | Calibration Status: Valid | Accepted Range: ±0.05 pH units | Status: ✓ Within specification
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Quality Control Check</strong>
+                        Reference Standard: 6.86 pH | Measured Value: 6.84 pH | Variance: -0.02 pH | Acceptance Criteria: ±0.10 | Status: ✓ PASS
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Error Correction Log</strong>
+                        Original Entry: 25.3°C | Corrected Entry: 25.8°C | Reason: Misread initial value | Approved By: Michael Chen | Timestamp: 2026-08-29 10:45:00 | Status: ✓ Documented correction
+                    </div>
+                </div>
+            </div>
+
+            <!-- ALCOA+ Additional Principles -->
+            <div class="principle-card plus" data-principle="Complete">
+                <button class="toggle-btn" onclick="toggleTestData(this)">View Test Data</button>
+                <h3><span class="principle-icon">✅</span> Complete <span class="badge plus">PLUS</span></h3>
+                <p class="definition">"Is all relevant data included?"</p>
+                <p class="details">All required data elements must be present. No omissions of relevant information, even if seemingly minor.</p>
+                <div class="checklist">
+                    <div class="checklist-title">Key Practices:</div>
+                    <ul>
+                        <li>Complete data entry forms</li>
+                        <li>No missing fields or sections</li>
+                        <li>Documentation of all relevant events</li>
+                        <li>Traceability of all components</li>
+                    </ul>
+                </div>
+                <div class="test-data">
+                    <h4>📋 Test Data Samples:</h4>
+                    <div class="test-data-item">
+                        <strong>Form Completeness Check - FORM-001</strong>
+                        Required Fields: 15 | Completed Fields: 15 | Missing Fields: 0 | Status: ✓ 100% Complete
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Batch Record Sections</strong>
+                        Sections Required: 12 (Raw Materials, Operations, QC Tests, etc.) | Sections Provided: 12 | Status: ✓ All sections documented
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Component Traceability</strong>
+                        Component ID: MAT-2026-08-001 | Supplier: Chemical Corp | Lot #: LC456789 | Expiry: 2027-12-31 | Status: ✓ Complete documentation chain
+                    </div>
+                </div>
+            </div>
+
+            <div class="principle-card plus" data-principle="Consistent">
+                <button class="toggle-btn" onclick="toggleTestData(this)">View Test Data</button>
+                <h3><span class="principle-icon">🔗</span> Consistent <span class="badge plus">PLUS</span></h3>
+                <p class="definition">"Does it align across all records?"</p>
+                <p class="details">Data must be consistent across all systems, records, and documents with no contradictions or discrepancies.</p>
+                <div class="checklist">
+                    <div class="checklist-title">Key Practices:</div>
+                    <ul>
+                        <li>System reconciliation</li>
+                        <li>Standardized procedures</li>
+                        <li>Cross-reference verification</li>
+                        <li>Unified data standards</li>
+                    </ul>
+                </div>
+                <div class="test-data">
+                    <h4>📋 Test Data Samples:</h4>
+                    <div class="test-data-item">
+                        <strong>System Reconciliation - Batch BT-001</strong>
+                        ERP System Value: 500.00 mg | LIMS Value: 500.00 mg | Discrepancy: None | Status: ✓ Consistent across systems
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Cross-Reference Verification</strong>
+                        Document 1 (Batch Log): pH = 6.80 | Document 2 (QA Report): pH = 6.80 | Document 3 (Archive): pH = 6.80 | Status: ✓ All align
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Data Standards Compliance</strong>
+                        Unit Standard Used: mg (consistent) | Date Format: YYYY-MM-DD (consistent) | Nomenclature: USP (consistent) | Status: ✓ Unified standards
+                    </div>
+                </div>
+            </div>
+
+            <div class="principle-card plus" data-principle="Enduring">
+                <button class="toggle-btn" onclick="toggleTestData(this)">View Test Data</button>
+                <h3><span class="principle-icon">⏳</span> Enduring <span class="badge plus">PLUS</span></h3>
+                <p class="definition">"Will it survive the test of time?"</p>
+                <p class="details">Data must be stored and preserved in a way that ensures it remains accessible and unchanged throughout its required retention period.</p>
+                <div class="checklist">
+                    <div class="checklist-title">Key Practices:</div>
+                    <ul>
+                        <li>Proper data storage</li>
+                        <li>Backup and recovery procedures</li>
+                        <li>Defined retention schedules</li>
+                        <li>Migration for format obsolescence</li>
+                    </ul>
+                </div>
+                <div class="test-data">
+                    <h4>📋 Test Data Samples:</h4>
+                    <div class="test-data-item">
+                        <strong>Storage Status - Batch BT-2026-08-001</strong>
+                        Storage Location: Archive Server (Redundant RAID-5) | Environment: Temperature 20°C, Humidity 45% | Integrity Check: Pass | Status: ✓ Secure storage
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Backup & Recovery</strong>
+                        Primary Backup: Daily | Secondary Backup: Weekly Offsite | Recovery Test Last Run: 2026-08-22 | Recovery Time: 2 hours | Status: ✓ Verified functional
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Retention Schedule</strong>
+                        Record Type: Batch Records | Retention Period: 5 years | Scheduled Deletion Date: 2031-08-29 | Format Migration: PDF/A-1 standard | Status: ✓ Scheduled for archival
+                    </div>
+                </div>
+            </div>
+
+            <div class="principle-card plus" data-principle="Available">
+                <button class="toggle-btn" onclick="toggleTestData(this)">View Test Data</button>
+                <h3><span class="principle-icon">🔍</span> Available <span class="badge plus">PLUS</span></h3>
+                <p class="definition">"Can it be retrieved when needed?"</p>
+                <p class="details">Data must be readily retrievable and accessible to authorized personnel for review, audit, or investigation purposes.</p>
+                <div class="checklist">
+                    <div class="checklist-title">Key Practices:</div>
+                    <ul>
+                        <li>Organized filing systems</li>
+                        <li>Access controls and permissions</li>
+                        <li>Quick retrieval capabilities</li>
+                        <li>Regulatory inspection readiness</li>
+                    </ul>
+                </div>
+                <div class="test-data">
+                    <h4>📋 Test Data Samples:</h4>
+                    <div class="test-data-item">
+                        <strong>Search & Retrieval Test</strong>
+                        Query: "Batch BT-2026-08-001" | System: Batch Management System | Search Time: 0.15 seconds | Results: 247 records found | Status: ✓ Quick retrieval
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Access Control Log</strong>
+                        User: Sarah Johnson (sjohnson) | Role: QA Analyst | Access Level: View/Print | Last Access: 2026-08-29 14:22:00 | Action: Viewed batch record | Status: ✓ Authorized access logged
+                    </div>
+                    <div class="test-data-item">
+                        <strong>Inspection Readiness</strong>
+                        Filing System: Indexed & categorized | Access Speed: <1 second | Audit Trail: Complete | Format: Inspection-ready | Status: ✓ FDA inspection ready
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="compliance-section">
+            <h2>Implementation Checklist</h2>
+            <table class="compliance-table">
+                <thead>
+                    <tr>
+                        <th>Principle</th>
+                        <th>Description</th>
+                        <th>Frequency</th>
+                        <th>Responsible Party</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Attributable</strong></td>
+                        <td>Verify user identification and audit trails</td>
+                        <td>Monthly</td>
+                        <td>IT/Quality</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Legible</strong></td>
+                        <td>Review data entry quality and formatting</td>
+                        <td>Ongoing</td>
+                        <td>Department Leads</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contemporaneous</strong></td>
+                        <td>Audit timing of data entry against activities</td>
+                        <td>Quarterly</td>
+                        <td>Operations</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Original</strong></td>
+                        <td>Verify original records are preserved</td>
+                        <td>Semi-annually</td>
+                        <td>Records Management</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Accurate</strong></td>
+                        <td>Perform data validation and QC checks</td>
+                        <td>Real-time</td>
+                        <td>QA/QC Teams</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Complete</strong></td>
+                        <td>Verify all required fields are populated</td>
+                        <td>Real-time</td>
+                        <td>Data Entry Personnel</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Consistent</strong></td>
+                        <td>Reconcile data across systems</td>
+                        <td>Weekly</td>
+                        <td>System Administrators</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Enduring</strong></td>
+                        <td>Review storage and backup integrity</td>
+                        <td>Monthly</td>
+                        <td>IT/Data Management</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Available</strong></td>
+                        <td>Test data retrieval and access controls</td>
+                        <td>Quarterly</td>
+                        <td>IT Security</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="resource-section">
+            <h2>Essential Resources & References</h2>
+            <div class="resource-list">
+                <div class="resource-item">
+                    <strong>21 CFR Part 11</strong>
+                    <p>FDA regulations for electronic records and electronic signatures. This is the foundational regulatory requirement for all digital data in pharmaceutical operations.</p>
+                </div>
+                <div class="resource-item">
+                    <strong>ICH GCP Guidelines</strong>
+                    <p>International Conference on Harmonization Good Clinical Practice guidelines for data integrity in clinical research.</p>
+                </div>
+                <div class="resource-item">
+                    <strong>FDA Data Integrity Guidance</strong>
+                    <p>Official FDA guidance documents on data integrity expectations for regulated laboratories and manufacturing.</p>
+                </div>
+                <div class="resource-item">
+                    <strong>Internal SOP Documentation</strong>
+                    <p>Eli Lilly specific Standard Operating Procedures that detail ALCOA+ implementation requirements.</p>
+                </div>
+                <div class="resource-item">
+                    <strong>System Validation Records</strong>
+                    <p>Documentation that systems and equipment meet ALCOA+ requirements and regulatory standards.</p>
+                </div>
+                <div class="resource-item">
+                    <strong>Training Materials</strong>
+                    <p>Ongoing training resources to ensure all staff understand and comply with ALCOA+ principles.</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 Eli Lilly Operations Team | ALCOA+ Data Integrity Framework</p>
+            <p>Last Updated: August 29, 2026 | For Official Use Only</p>
+        </footer>
+    </div>
+
+    <script>
+        const selectedPrinciples = {};
+
+        const principleData = {
+            'Attributable': {
+                records: 3,
+                compliance: 100,
+                summary: 'All actions traced to users with timestamps and reasons documented.'
+            },
+            'Legible': {
+                records: 3,
+                compliance: 100,
+                summary: 'All data entries are clear, readable, and in standardized formats.'
+            },
+            'Contemporaneous': {
+                records: 3,
+                compliance: 66,
+                summary: 'Most entries are real-time; one batch completion delayed by 1 hour.'
+            },
+            'Original': {
+                records: 3,
+                compliance: 100,
+                summary: 'Original records preserved with documented copies and transfer chains.'
+            },
+            'Accurate': {
+                records: 3,
+                compliance: 100,
+                summary: 'All measurements validated, calibrated, and errors properly documented.'
+            },
+            'Complete': {
+                records: 3,
+                compliance: 100,
+                summary: 'All required fields completed; complete component traceability maintained.'
+            },
+            'Consistent': {
+                records: 3,
+                compliance: 100,
+                summary: 'Data aligned across all systems with unified standards applied.'
+            },
+            'Enduring': {
+                records: 3,
+                compliance: 100,
+                summary: 'Data secured in redundant storage with verified backup procedures.'
+            },
+            'Available': {
+                records: 3,
+                compliance: 100,
+                summary: 'Records quickly retrievable with complete access controls and audit trails.'
+            }
+        };
+
+        function toggleTestData(button) {
+            const card = button.closest('.principle-card');
+            const testData = card.querySelector('.test-data');
+            const principle = card.dataset.principle;
+
+            testData.classList.toggle('visible');
+
+            if (testData.classList.contains('visible')) {
+                button.textContent = 'Hide Test Data';
+                button.style.opacity = '0.8';
+                if (!selectedPrinciples[principle]) {
+                    selectedPrinciples[principle] = true;
+                    updateDashboard();
+                }
+            } else {
+                button.textContent = 'View Test Data';
+                button.style.opacity = '1';
+                delete selectedPrinciples[principle];
+                updateDashboard();
+            }
+        }
+
+        function updateDashboard() {
+            const selectedCount = Object.keys(selectedPrinciples).length;
+            let totalRecords = 0;
+            let totalCompliance = 0;
+            let dataDisplay = document.getElementById('selected-data-display');
+
+            // Update metric cards with smooth animation
+            updateMetricWithAnimation('selected-count', selectedCount);
+
+            if (selectedCount === 0) {
+                updateMetricWithAnimation('compliance-rate', '0%');
+                updateMetricWithAnimation('records-reviewed', 0);
+                updateMetricWithAnimation('audit-status', '✓');
+                dataDisplay.classList.remove('has-data');
+                dataDisplay.innerHTML = '<h3>Selected Test Data</h3><div class="no-selection">Select a principle to view test data</div>';
+                return;
+            }
+
+            let htmlContent = '<h3>Selected Test Data</h3>';
+
+            for (const principle in selectedPrinciples) {
+                const data = principleData[principle];
+                totalRecords += data.records;
+                totalCompliance += data.compliance;
+
+                const complianceColor = data.compliance >= 90 ? '#28a745' : data.compliance >= 70 ? '#ffc107' : '#dc3545';
+
+                htmlContent += `
+                    <div class="data-item">
+                        <div class="principle-name">📊 ${principle}</div>
+                        <div class="data-content">
+                            <strong>Records Reviewed:</strong> ${data.records}<br>
+                            <strong>Compliance Rate:</strong> <span style="color: ${complianceColor}; font-weight: 600;">${data.compliance}%</span><br>
+                            <strong>Summary:</strong> ${data.summary}
+                        </div>
+                    </div>
+                `;
+            }
+
+            const averageCompliance = Math.round(totalCompliance / selectedCount);
+            const auditStatus = averageCompliance >= 90 ? '✓ PASS' : averageCompliance >= 70 ? '⚠ WARNING' : '✗ FAIL';
+
+            updateMetricWithAnimation('compliance-rate', averageCompliance + '%');
+            updateMetricWithAnimation('records-reviewed', totalRecords);
+            updateMetricWithAnimation('audit-status', auditStatus);
+
+            dataDisplay.classList.add('has-data');
+            dataDisplay.innerHTML = htmlContent;
+        }
+
+        function updateMetricWithAnimation(elementId, newValue) {
+            const element = document.getElementById(elementId);
+            const currentValue = element.textContent;
+
+            if (currentValue !== newValue.toString()) {
+                element.style.opacity = '0.6';
+                setTimeout(() => {
+                    element.textContent = newValue;
+                    element.style.opacity = '1';
+                    element.style.transition = 'opacity 0.3s ease';
+                }, 100);
+            }
+        }
+
+        // Initialize dashboard
+        updateDashboard();
+    </script>
+</body>
+</html>
