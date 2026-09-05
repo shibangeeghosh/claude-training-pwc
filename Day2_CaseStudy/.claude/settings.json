@@ -1,0 +1,42 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '✓ Checking for unused imports and variables after file change'",
+            "statusMessage": "Checking for unused imports and variables..."
+          },
+          {
+            "type": "command",
+            "command": "echo '✓ Reminder: Run npm run dev to test the application locally after code changes'",
+            "statusMessage": "Reminder: Run the app locally"
+          },
+          {
+            "type": "command",
+            "command": "git diff --stat 2>/dev/null || echo 'Summary: Changes made to files'",
+            "statusMessage": "Creating summary of changes..."
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(npm *)",
+      "Bash(node *)",
+      "Bash(git *)",
+      "Edit(src/**)",
+      "Edit(public/**)",
+      "Write(src/**)",
+      "Read"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Edit(dist/**)",
+      "Edit(node_modules/**)"
+    ]
+  }
+}

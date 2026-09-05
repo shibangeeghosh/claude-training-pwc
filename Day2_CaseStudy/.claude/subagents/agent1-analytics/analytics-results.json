@@ -1,0 +1,114 @@
+{
+  "timestamp": "2026-09-05T07:42:13.714Z",
+  "summary": {
+    "totalShipments": 50,
+    "highRiskShipments": 0,
+    "temperatureExcursionShipments": 13,
+    "averageRiskScore": 14.31
+  },
+  "riskDistribution": {
+    "low": {
+      "count": 44,
+      "percentage": 88
+    },
+    "medium": {
+      "count": 6,
+      "percentage": 12
+    },
+    "high": {
+      "count": 0,
+      "percentage": 0
+    }
+  },
+  "topFiveRiskyShipments": [
+    {
+      "rank": 1,
+      "id": "PHM-000036",
+      "destination": "NYC, USA",
+      "riskScore": 55.88000000000001,
+      "riskLevel": "medium",
+      "temperature": 12.71,
+      "temperatureStatus": "ABOVE RANGE (12.71°C)",
+      "humidity": 74.39,
+      "lastUpdated": "2026-08-30T07:42:13.713Z"
+    },
+    {
+      "rank": 2,
+      "id": "PHM-000049",
+      "destination": "Tokyo, Japan",
+      "riskScore": 50,
+      "riskLevel": "medium",
+      "temperature": 5.01,
+      "temperatureStatus": "IN RANGE (5.01°C)",
+      "humidity": 4.79,
+      "lastUpdated": "2026-08-26T07:42:13.713Z"
+    },
+    {
+      "rank": 3,
+      "id": "PHM-000050",
+      "destination": "Toronto, Canada",
+      "riskScore": 41.2,
+      "riskLevel": "medium",
+      "temperature": -0.12,
+      "temperatureStatus": "BELOW RANGE (-0.12°C)",
+      "humidity": 56.29,
+      "lastUpdated": "2026-08-24T07:42:13.713Z"
+    },
+    {
+      "rank": 4,
+      "id": "PHM-000008",
+      "destination": "Dubai, UAE",
+      "riskScore": 39.2,
+      "riskLevel": "medium",
+      "temperature": 0.08,
+      "temperatureStatus": "BELOW RANGE (0.08°C)",
+      "humidity": 48.09,
+      "lastUpdated": "2026-08-25T07:42:13.713Z"
+    },
+    {
+      "rank": 5,
+      "id": "PHM-000010",
+      "destination": "Sydney, Australia",
+      "riskScore": 36.8,
+      "riskLevel": "medium",
+      "temperature": -0.08,
+      "temperatureStatus": "BELOW RANGE (-0.08°C)",
+      "humidity": 31.65,
+      "lastUpdated": "2026-08-28T07:42:13.713Z"
+    }
+  ],
+  "commonDestinations": [
+    {
+      "destination": "Dubai, UAE",
+      "count": 10
+    },
+    {
+      "destination": "London, UK",
+      "count": 8
+    },
+    {
+      "destination": "Berlin, Germany",
+      "count": 8
+    },
+    {
+      "destination": "Toronto, Canada",
+      "count": 6
+    },
+    {
+      "destination": "Sydney, Australia",
+      "count": 5
+    },
+    {
+      "destination": "NYC, USA",
+      "count": 5
+    },
+    {
+      "destination": "Tokyo, Japan",
+      "count": 4
+    },
+    {
+      "destination": "Singapore",
+      "count": 4
+    }
+  ]
+}

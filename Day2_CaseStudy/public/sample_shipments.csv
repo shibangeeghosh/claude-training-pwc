@@ -1,0 +1,26 @@
+ID,Destination,Temperature (°C),Humidity (%),Risk Score,Has Temperature Excursion,Status,Last Updated
+SHIP-00001,Atlanta,5.2,57.7,29,No,Pending,2026-09-02 11:24
+SHIP-00002,Phoenix,7.0,52.6,56,No,Delivered,2026-09-02 17:24
+SHIP-00003,Houston,4.6,61.6,33,No,In Transit,2026-09-05 05:24
+SHIP-00004,Miami,11.0,67.7,21,Yes,At Warehouse,2026-09-02 09:24
+SHIP-00005,Boston,3.2,65.6,92,No,At Warehouse,2026-09-04 22:24
+SHIP-00006,New York,5.0,73.9,60,No,At Warehouse,2026-09-02 23:24
+SHIP-00007,Houston,6.2,64.0,18,No,In Transit,2026-09-02 19:24
+SHIP-00008,Los Angeles,9.7,48.4,28,Yes,In Transit,2026-09-05 02:24
+SHIP-00009,Chicago,9.7,65.4,22,Yes,In Transit,2026-09-03 13:24
+SHIP-00010,Los Angeles,3.1,70.3,77,No,In Transit,2026-09-04 09:24
+SHIP-00011,Chicago,4.2,66.8,53,No,Pending,2026-09-02 18:24
+SHIP-00012,Boston,4.5,36.8,52,No,Delivered,2026-09-03 06:24
+SHIP-00013,Boston,2.8,68.0,77,No,Pending,2026-09-02 14:24
+SHIP-00014,Chicago,5.7,63.9,91,No,Delivered,2026-09-04 06:24
+SHIP-00015,Chicago,2.8,72.3,84,No,In Transit,2026-09-04 04:24
+SHIP-00016,Boston,4.1,52.8,33,No,In Transit,2026-09-05 05:24
+SHIP-00017,Boston,9.5,57.3,57,Yes,Delivered,2026-09-05 01:24
+SHIP-00018,Denver,3.6,70.9,43,No,In Transit,2026-09-04 13:24
+SHIP-00019,Denver,3.6,40.1,80,No,In Transit,2026-09-04 23:24
+SHIP-00020,New York,3.4,67.2,26,No,Pending,2026-09-02 11:24
+SHIP-00021,New York,6.1,44.9,83,No,Delivered,2026-09-02 17:24
+SHIP-00022,Phoenix,5.8,58.8,57,No,At Warehouse,2026-09-04 14:24
+SHIP-00023,Los Angeles,7.4,74.9,19,No,In Transit,2026-09-03 16:24
+SHIP-00024,Boston,6.0,55.9,37,No,Delivered,2026-09-04 20:24
+SHIP-00025,Boston,7.2,46.6,78,No,Pending,2026-09-02 20:24
