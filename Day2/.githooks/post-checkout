@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# ALCOA+ QA Application - Post-checkout Hook
+# Runs after checking out branches to ensure environment is properly configured
+
+# Colors for output
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+echo -e "${BLUE}[Post-checkout] Setting up development environment...${NC}"
+
+# Check if .env exists
+if [ ! -f .env ]; then
+    echo -e "${YELLOW}! .env file not found. Creating from .env.example...${NC}"
+    if [ -f .env.example ]; then
+        cp .env.example .env
+        echo -e "${BLUE}✓ Created .env from .env.example${NC}"
+    fi
+fi
+
+# Check if .env.production exists
+if [ ! -f .env.production ]; then
+    echo -e "${YELLOW}! .env.production file not found. Creating from .env.example...${NC}"
+    if [ -f .env.example ]; then
+        cp .env.example .env.production
+        echo -e "${BLUE}✓ Created .env.production from .env.example${NC}"
+    fi
+fi
+
+# Check if hooks are properly configured
+if [ "$(git config core.hooksPath)" != ".githooks" ]; then
+    echo -e "${YELLOW}! Configuring git hooks...${NC}"
+    git config core.hooksPath .githooks
+    echo -e "${BLUE}✓ Git hooks path configured${NC}"
+fi
+
+# Reminder about database configuration
+echo -e "${BLUE}──────────────────────────────────────────${NC}"
+echo -e "${BLUE}Database Configuration for Local Testing${NC}"
+echo -e "${BLUE}──────────────────────────────────────────${NC}"
+echo -e "Environment files configured:"
+echo -e "  • .env              - Development environment"
+echo -e "  • .env.production   - Production (local testing)"
+echo -e ""
+echo -e "Database Host: localhost"
+echo -e "Ensure your database is running on:"
+echo -e "  • Host: localhost"
+echo -e "  • Port: 5432"
+echo -e ""
+echo -e "To start development:"
+echo -e "  ${YELLOW}npm install${NC}"
+echo -e "  ${YELLOW}npm run dev${NC}"
+
+exit 0

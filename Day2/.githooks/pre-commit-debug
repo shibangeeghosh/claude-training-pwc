@@ -1,0 +1,104 @@
+#!/bin/bash
+
+# ALCOA+ QA Application - Pre-commit Debug Hook
+# Validates no debug code is left in commits
+
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+echo -e "${BLUE}[Pre-commit] Checking for debug code...${NC}"
+
+ISSUES_FOUND=0
+DEBUG_FILES=()
+
+# Patterns to detect debug code
+DEBUG_PATTERNS=(
+  "debugger\s*;"
+  "debug\.enable()"
+  "debug\.disable()"
+  "debug\.log("
+  "debug\.info("
+  "debug\.warn("
+  "debug\.error("
+  "debug\.time("
+  "debug\.timeEnd("
+  "console\.log("
+  "console\.debug("
+  "console\.trace("
+  "__DEBUG"
+  "DEBUG_MODE"
+)
+
+# Check staged files for debug statements
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|jsx|ts|tsx)$' || true)
+
+if [ -z "$STAGED_FILES" ]; then
+  echo -e "${GREEN}✓ No JavaScript files to check${NC}"
+  exit 0
+fi
+
+echo -e "${YELLOW}Scanning for debug code...${NC}"
+
+while IFS= read -r file; do
+  [ -z "$file" ] && continue
+
+  # Skip test files (they can have debug)
+  if [[ "$file" =~ \.test\.|\.spec\. ]]; then
+    continue
+  fi
+
+  # Skip debug utility files
+  if [[ "$file" =~ debug\.js$ ]]; then
+    continue
+  fi
+
+  for pattern in "${DEBUG_PATTERNS[@]}"; do
+    if grep -qE "$pattern" "$file" 2>/dev/null; then
+      # Check if it's in a comment (allowed) or actual code (not allowed)
+      if grep -qE "^\s*//.*$pattern|^\s*/\*.*$pattern" "$file"; then
+        # It's in a comment, skip
+        continue
+      fi
+
+      DEBUG_FILES+=("$file")
+      ISSUES_FOUND=1
+      break
+    fi
+  done
+done <<< "$STAGED_FILES"
+
+# Report findings
+if [ $ISSUES_FOUND -eq 0 ]; then
+  echo -e "${GREEN}✓ No debug code detected${NC}"
+  echo -e "${GREEN}✓ Ready for commit${NC}"
+else
+  echo -e "${RED}✗ Debug code detected in staged files:${NC}"
+  echo ""
+  for file in "${DEBUG_FILES[@]}"; do
+    echo -e "${RED}  • $file${NC}"
+    # Show lines with debug code
+    grep -n -E "debugger|debug\.|console\.|__DEBUG|DEBUG_MODE" "$file" | head -3 | sed 's/^/    /'
+  done
+  echo ""
+  echo -e "${YELLOW}To fix:${NC}"
+  echo -e "  1. Remove or comment out debug statements"
+  echo -e "  2. Remove console.log statements"
+  echo -e "  3. Remove debugger statements"
+  echo -e "  4. Stage changes: git add ."
+  echo -e "  5. Retry commit: git commit${NC}"
+  echo ""
+  echo -e "${YELLOW}For development, use:${NC}"
+  echo -e "  npm run dev -- --debug"
+  echo -e "  Then debug in browser console with: debug.enable()${NC}"
+  echo ""
+  exit 1
+fi
+
+echo -e "${GREEN}✓ Debug validation passed${NC}"
+exit 0

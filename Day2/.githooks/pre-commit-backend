@@ -1,0 +1,131 @@
+#!/bin/bash
+
+# ALCOA+ QA Application - Pre-commit Backend Security Hook
+# Validates backend routes comply with mandatory security and architecture rules
+
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+echo -e "${BLUE}[Pre-commit] Validating backend security rules...${NC}"
+
+# Check if backend directory exists (for future use)
+if [ ! -d "backend" ] && [ ! -d "server" ] && [ ! -d "api" ]; then
+  echo -e "${GREEN}✓ No backend directory found (frontend-only for now)${NC}"
+  exit 0
+fi
+
+BACKEND_DIR=""
+if [ -d "backend" ]; then BACKEND_DIR="backend"; fi
+if [ -d "server" ]; then BACKEND_DIR="server"; fi
+if [ -d "api" ]; then BACKEND_DIR="api"; fi
+
+echo -e "${YELLOW}Scanning backend routes in: ${BACKEND_DIR}${NC}"
+
+ISSUES_FOUND=0
+VIOLATIONS=()
+
+# Check for common security violations in route files
+check_backend_security() {
+  local file=$1
+  local line_num=0
+
+  while IFS= read -r line; do
+    ((line_num++))
+
+    # Check 1: Hardcoded secrets/API keys
+    if grep -qE "api_key\s*=\s*['\"]|secret\s*=\s*['\"]|password\s*=\s*['\"]" <<< "$line"; then
+      VIOLATIONS+=("$file:$line_num - Hardcoded secret detected (use environment variables)")
+      ISSUES_FOUND=1
+    fi
+
+    # Check 2: SQL concatenation (SQL injection)
+    if grep -qE "\`.*\${.*}\` |\".*\+.*\"|'.*\+.*'" <<< "$line" && grep -qE "SELECT|INSERT|UPDATE|DELETE" <<< "$line"; then
+      VIOLATIONS+=("$file:$line_num - Potential SQL injection (use parameterized queries)")
+      ISSUES_FOUND=1
+    fi
+
+    # Check 3: Missing authentication on route definition
+    if grep -qE "\.get\(|\.post\(|\.put\(|\.delete\(|\.patch\(" <<< "$line"; then
+      # This is a route definition - check if next few lines have auth
+      next_lines=$(tail -n +$((line_num+1)) "$file" | head -n 5 | tr '\n' ' ')
+      if ! grep -qE "authenticateToken|authenticate|verify|requireAuth|checkAuth|bearerToken|jwt|middleware.*auth" <<< "$next_lines"; then
+        # Whitelist public endpoints
+        if ! grep -qE "\.get.*health|\.get.*status|\.get.*ping|\.post.*login|\.post.*register" <<< "$line"; then
+          VIOLATIONS+=("$file:$line_num - Missing authentication (add authenticateToken middleware)")
+          ISSUES_FOUND=1
+        fi
+      fi
+    fi
+
+    # Check 4: Logging sensitive data
+    if grep -qE "console\.log|logger\.|log\(|warn\(|error\(" <<< "$line"; then
+      if grep -qE "password|token|secret|api[_-]?key|credential|ssn|credit" <<< "$line"; then
+        VIOLATIONS+=("$file:$line_num - Logging sensitive data")
+        ISSUES_FOUND=1
+      fi
+    fi
+
+    # Check 5: Returning user input directly (XSS/Injection)
+    if grep -qE "res\.send\(req\.|res\.json\(req\.|return req\." <<< "$line"; then
+      VIOLATIONS+=("$file:$line_num - Returning unsanitized user input (validate & sanitize first)")
+      ISSUES_FOUND=1
+    fi
+
+    # Check 6: Missing error handling
+    if grep -qE "\.query\(|\.find\(|\.save\(|\.delete\(" <<< "$line"; then
+      # Check if wrapped in try-catch or has error handler
+      surrounding=$(tail -n +$((line_num-2)) "$file" | head -n 5 | tr '\n' ' ')
+      if ! grep -qE "try|catch|\.catch\(|error|err" <<< "$surrounding"; then
+        VIOLATIONS+=("$file:$line_num - Database operation without error handling")
+        ISSUES_FOUND=1
+      fi
+    fi
+
+  done < "$file"
+}
+
+# Find and check all backend route files
+ROUTE_FILES=$(find "${BACKEND_DIR}" -type f \( -name "*route*" -o -name "*handler*" -o -name "*controller*" -o -name "*api.js" -o -name "*service.js" \) 2>/dev/null || true)
+
+if [ -z "$ROUTE_FILES" ]; then
+  echo -e "${GREEN}✓ No backend route files found to validate${NC}"
+  exit 0
+fi
+
+while IFS= read -r file; do
+  [ -z "$file" ] && continue
+  check_backend_security "$file"
+done <<< "$ROUTE_FILES"
+
+# Report findings
+if [ $ISSUES_FOUND -eq 0 ]; then
+  echo -e "${GREEN}✓ Backend security validation passed${NC}"
+  echo -e "${GREEN}✓ No security violations detected${NC}"
+else
+  echo -e "${RED}✗ Backend security violations detected:${NC}"
+  echo ""
+  for violation in "${VIOLATIONS[@]}"; do
+    echo -e "${RED}  • $violation${NC}"
+  done
+  echo ""
+  echo -e "${YELLOW}Reference: See BACKEND_SECURITY.md for guidelines${NC}"
+  echo ""
+  echo -e "${YELLOW}Common fixes:${NC}"
+  echo -e "  1. Move hardcoded secrets to .env files"
+  echo -e "  2. Use parameterized queries (prepared statements)"
+  echo -e "  3. Add authentication middleware to routes"
+  echo -e "  4. Never log passwords, tokens, or API keys"
+  echo -e "  5. Validate and sanitize all user input"
+  echo -e "  6. Add try-catch blocks for database operations"
+  echo ""
+  exit 1
+fi
+
+echo -e "${GREEN}✓ All security rules verified${NC}"
+exit 0
