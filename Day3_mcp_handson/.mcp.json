@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "travelops": {
+      "type": "stdio",
+      "command": ".venv/bin/python",
+      "args": [
+        "travelops_mcp_server.py"
+      ],
+      "env": {}
+    },
+    "create_receipt_draft": {
+      "type": "stdio",
+      "command": ".venv/bin/python",
+      "args": [
+        "create_receipt_draft.py"
+      ],
+      "env": {}
+    }
+  }
+}
