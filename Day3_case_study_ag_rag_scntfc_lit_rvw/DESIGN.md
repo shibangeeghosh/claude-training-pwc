@@ -232,6 +232,20 @@ if __name__ == "__main__":
 
 This ensures every call to `FetchDocument` or `QuerySourceIndex` passes through the allowlist check before executing.
 
+### Defense in depth: MCP + hook
+
+The corpus is accessed exclusively through a set of **MCP (Model Context Protocol) servers**, one per source type:
+- `mcp-pubmed`: Scoped to PubMed/PMC literature APIs only
+- `mcp-clinicaltrials`: Scoped to ClinicalTrials.gov and ISRCTN APIs only
+- `mcp-patents`: Scoped to USPTO and EPO patent APIs only
+- `mcp-internal-reports`: Scoped to the organization's internal report store only
+
+Each MCP server is configured at deployment time with a fixed set of credentials and endpoint URLs for its approved sources — it has no code path to any other source. An agent cannot tell the `mcp-pubmed` connector to query a patent database; the connector doesn't have that capability.
+
+The `PreToolUse` allowlist hook (described above) is a **second, independent check** that runs on every call. The hook validates that the target of the tool call matches an entry in `allowlist.yaml` before the call executes, regardless of which MCP connector initiated it.
+
+This is defense in depth: for an unapproved source to be reached, *both* failures would have to occur simultaneously (a misconfigured MCP connector exposing an off-limits endpoint *and* a bypassed allowlist hook), which is exponentially less likely than a single failure. The MCP connector provides the primary boundary; the hook provides the auditability and the second gate.
+
 ## 4. Commitment 2 — Ground every claim
 
 ### The rule
@@ -378,3 +392,91 @@ Even with a well-written `gaps` field, a human reviewer can skim past gaps and a
 ### Grounding verification adds latency
 
 The grounding-verification pass (section 4) requires a secondary model call or a semantic-entailment check, adding latency to every response. A real deployment trades this latency cost against the cost of shipping ungrounded claims. For a high-stakes decision (e.g., clinical trial design), the latency is worth it. For a preliminary research question, it may not be.
+
+## 9. Agent operating loop
+
+This section formalizes one complete review cycle: what starts it, the steps the agent takes in order (and which approved tool each uses), every way the loop can stop, and where a human makes the final decision.
+
+### Trigger
+
+**Valid trigger only**: A named requester (an R&D scientist, analyst, or clinician with authentication to the review interface) submits one scoped research question through the approved request interface.
+
+Examples of valid triggers:
+- "What is the efficacy of metformin in preventing type 2 diabetes in prediabetic adults, per published trials?"
+- "Has the FDA issued guidance on device labeling for product X since 2024?"
+
+Examples of *invalid* attempts to trigger (the agent does not respond to these):
+- An automated agent self-initiates a review based on a timer or external event — the agent never starts its own investigations.
+- A scheduled re-run of a previously-asked question to "catch new literature" — each new question, or a resubmission after a clarifying request, is a fresh trigger, not a continuation or re-run.
+
+### Steps in order (each with its approved tool)
+
+1. **Receive & validate question** (no external tool)  
+   Intake check: is the question non-empty and well-formed enough to attempt scoping? If the question is empty or malformed, reject it with a clear message and end the loop. This is the only step with no external tool call.
+
+2. **Decompose into sub-queries** (Query Planner — internal reasoning, no external tool)  
+   Break the research question into sub-queries, one per source type: What do I ask the literature index? The patent database? The trial registry? The internal reports? This step is pure reasoning; no external retrieval occurs yet.
+
+3. **Connect to approved corpus** (MCP source connectors: `mcp-pubmed`, `mcp-clinicaltrials`, `mcp-patents`, `mcp-internal-reports`)  
+   Establish connections to the four MCP servers, one per source type (see section 3's "Defense in depth"). Each connector is pre-scoped to its own corpus only; the agent cannot tell a connector to query outside its bounds.
+
+4. **Retrieve documents** (`FetchDocument`/`QuerySourceIndex` through MCP connectors)  
+   Execute the sub-queries from step 2 against the connectors. Every call passes the `PreToolUse` allowlist hook (`check_allowlist.py` from section 3) before execution — the hook validates the target and allows/denies independently.
+
+5. **Ground claims** (Grounding/Citation Checker — section 4)  
+   Take whatever was actually retrieved in step 4 and check that every sentence in a draft answer carries a valid citation ID to a retrieved passage. Strip ungrounded claims and move them to `gaps`.
+
+6. **Compose structured output** (Structured Output Composer — section 5)  
+   Fill the fixed schema: `answer` (with every sentence citation-tagged), `confidence` (level + basis), `citations` (array of ID/source/locator/snippet), `gaps` (mandatory list of holes, conflicts, or uncertainties).
+
+7. **Apply fail-safe gate** (Fail-safe Gate logic — section 6)  
+   Check the concrete trigger conditions: zero allowlisted hits? High-confidence conflicts? Ambiguous question? Stale allowlist? Hook denials? For each condition that fires, decide: proceed with answer, escalate to human, or refuse. The output of this step is a candidate answer (either a structured response or a refusal/escalation notice).
+
+8. **Route to human reviewer** (no tool call; human-in-the-loop gate)  
+   The candidate output (from step 7) is never released directly to the requester. Instead, it is routed to a named, domain-qualified reviewer (e.g., team lead, literature-review lead for that domain) for sign-off. The reviewer has access to the full structured output and the audit trail to date.
+
+9. **Record** (Audit logger — section 7)  
+   Append the full step-by-step trail to the audit log, capturing prompts at each reasoning step, MCP connectors used and their scopes, hook allow/deny decisions, the reviewer's identity and decision, and per-step timestamps. The entire loop is reconstructable from the audit trail alone.
+
+### Stop conditions: success and every way the loop halts short of success
+
+**Success — loop ends with release to requester:**
+- The named reviewer approves the candidate output at step 8. The output is released to the original requester with the reviewer's sign-off attached and logged (with reviewer name, timestamp, and decision). Loop ends. The requester may now use the output to inform their decision.
+
+**Halts short of success — loop ends without release to requester (each halt condition ends the loop entirely):**
+
+| Condition | Outcome |
+|-----------|---------|
+| **Zero allowlisted sources return any hit** | Refuse: the agent states which source categories were queried, what search terms were used, and that no allowlisted sources produced a result. No answer is issued. Loop ends. |
+| **High-confidence source conflict** (e.g., two trial registry entries directly contradict on a key parameter) | Escalate: the agent escalates to a human (not the requester) with the conflicting evidence trail attached. No answer is issued. Loop ends pending human input. |
+| **Question is too ambiguous to scope** (e.g., "Is X good?" with no population, outcome, or timeframe specified) | Clarify: the agent sends a clarifying question back to the requester, asking them to specify the missing details. Loop ends. A resubmission is a new trigger (step 1 again). |
+| **Allowlist stale for needed domain** (all matching entries in `allowlist.yaml` have `last_reviewed` > 12 months ago) | Escalate: the agent escalates to the named owner(s) of those allowlist entries, requesting a refresh. No answer is issued from stale sources. Loop ends pending allowlist refresh. |
+| **Retrieval hook denies access to needed source** (the allowlist gate blocks access to a source the query needed) | Refuse: the agent logs the denial, treats it as a retrieval gap, and if too many sources are unavailable, refuses to answer and notifies the requester which sources were blocked. Loop ends. |
+| **Named reviewer rejects the candidate output** (at step 8) | Reject: the reviewer's rejection reason is logged. Nothing is released to the requester. The requester may submit a fresh trigger (step 1 again) if they wish. Loop ends. |
+
+### Human handoff point — where, who, why, what they see
+
+**Where**: Between step 7 (fail-safe gate produces a candidate structured output) and release to the requester. The candidate output is *never* released directly — it must pass human review first.
+
+**Who**: A named, domain-qualified reviewer (e.g., a literature-review team lead, principal investigator, or designated domain expert for that topic). Not the requester themselves — there must be an independent reviewer to prevent confirmation bias and ensure the answer meets the standards outlined in this spec.
+
+**Why**: Section 1's critical non-goal: this system does not make the scientific decision. A human must confirm that (1) the answer is properly grounded in the retrieved evidence, (2) the confidence basis is reasonable and honest, and (3) the gaps are meaningfully stated. Only after this review can the output be treated as a decision-grade input to a scientific discussion.
+
+**What they see**:
+- The full structured output (answer, confidence, citations, gaps) from step 6.
+- The audit trail from steps 1–7: the original question, sub-queries generated in step 2, which MCP connectors and sources were queried, the hook's allow/deny log, every retrieved passage, the grounding check decisions, and which fail-safe conditions (if any) were considered.
+- The reviewer approves or rejects with a comment (e.g., "Grounding looks solid; confidence basis is honest" or "Gaps are too thin; I'm concerned the data from 2023 will be outdated").
+
+### Recording — what audit trail must capture
+
+Extend section 7's concept: the audit log must capture enough detail that the *entire loop*, not just the retrieval leg, is reconstructable after the fact. For every step above, log:
+
+1. **Step entry/exit**: timestamp and which step.
+2. **Prompts sent to the model**: the exact text/JSON prompt given to the model at each reasoning step (planner, grounding checker, output composer, fail-safe gate).
+3. **Model responses**: the model's output at each step (sub-queries, grounding decisions, composed output).
+4. **Tool calls**: which tool was invoked, its input parameters, which MCP connector (if applicable) and its configured scope.
+5. **Hook decisions**: every `PreToolUse` hook invocation: the tool name, target, and allow/deny decision with reason.
+6. **Decision gates**: at step 7, which fail-safe conditions were checked and what the gate decided (answer/escalate/refuse/clarify).
+7. **Human review**: at step 8, the reviewer's identity, approval/rejection decision, and any comment.
+
+Audit format: JSON lines (`.jsonl`), one complete entry per request. Each entry includes a `request_id` to link all steps together, and within it, an ordered array of `steps` capturing the above details. This makes it possible to replay or audit any request end-to-end.
