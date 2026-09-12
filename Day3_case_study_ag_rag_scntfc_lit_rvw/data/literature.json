@@ -1,0 +1,32 @@
+[
+  {
+    "id": "lit-aspirin-001",
+    "source": "literature",
+    "source_url": "eutils.ncbi.nlm.nih.gov/pubmed/12345678",
+    "locator": "PMID:12345678",
+    "title": "Aspirin for Primary Prevention of Cardiovascular Disease in Adults",
+    "snippet": "Aspirin has been shown to reduce the incidence of major adverse cardiovascular events in adults over 50 years of age, with a relative risk reduction of approximately 15% in several meta-analyses. The number needed to treat is approximately 67 over 2 years.",
+    "keywords": ["aspirin", "cardiovascular", "prevention", "adults"],
+    "date": "2025-03-15"
+  },
+  {
+    "id": "lit-aspirin-002",
+    "source": "literature",
+    "source_url": "eutils.ncbi.nlm.nih.gov/pubmed/87654321",
+    "locator": "PMID:87654321",
+    "title": "Cardiovascular Efficacy and Safety Profile of Low-Dose Aspirin",
+    "snippet": "Long-term low-dose aspirin therapy (75-100 mg daily) demonstrates efficacy in secondary prevention of cardiovascular events. Safety concerns include increased bleeding risk, which must be weighed against the cardiovascular benefit in individual patient populations.",
+    "keywords": ["aspirin", "cardiovascular", "efficacy", "safety"],
+    "date": "2025-01-20"
+  },
+  {
+    "id": "lit-metformin-001",
+    "source": "literature",
+    "source_url": "eutils.ncbi.nlm.nih.gov/pubmed/11223344",
+    "locator": "PMID:11223344",
+    "title": "Metformin in Prevention of Type 2 Diabetes: A Landmark Study",
+    "snippet": "The Diabetes Prevention Program demonstrated that metformin reduces the progression from impaired glucose tolerance to type 2 diabetes by 31% in overweight adults. The effect was particularly strong in adults under 60 years of age.",
+    "keywords": ["metformin", "diabetes", "prevention", "prediabetes"],
+    "date": "2024-11-10"
+  }
+]

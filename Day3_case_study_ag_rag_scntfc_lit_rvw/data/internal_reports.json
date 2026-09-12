@@ -1,0 +1,22 @@
+[
+  {
+    "id": "rep-internal-001",
+    "source": "internal",
+    "source_url": "reports.internal.corp/2025-Q2/cardiovascular-review",
+    "locator": "internal-report-2025-Q2-001",
+    "title": "Internal Analysis: Aspirin in Cardiovascular Prevention",
+    "snippet": "Our internal review of published data and trial results indicates that aspirin for primary prevention shows modest but clinically meaningful benefit in preventing cardiovascular events in adults over 50. The analysis synthesizes data from the Framingham Heart Study and related cohort studies.",
+    "keywords": ["aspirin", "cardiovascular", "prevention", "internal"],
+    "date": "2025-06-01"
+  },
+  {
+    "id": "rep-internal-002",
+    "source": "internal",
+    "source_url": "reports.internal.corp/2024-Q4/drug-efficacy-summary",
+    "locator": "internal-report-2024-Q4-001",
+    "title": "Summary of Efficacy Data for Lead Compounds",
+    "snippet": "As of Q4 2024, our compounds show efficacy profiles consistent with target product profiles. Metformin analogs demonstrate 28-35% reduction in diabetes progression in our internal screening models.",
+    "keywords": ["efficacy", "compounds", "drug", "screening"],
+    "date": "2024-12-10"
+  }
+]

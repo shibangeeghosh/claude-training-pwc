@@ -1,0 +1,22 @@
+[
+  {
+    "id": "pat-epo-001",
+    "source": "patent",
+    "source_url": "data.epo.org/patent/EP3456789",
+    "locator": "EP3456789",
+    "title": "Slow-Release Formulation for Drug Delivery",
+    "snippet": "A pharmaceutical composition comprising a sustained-release matrix for controlled drug delivery over extended periods. The formulation extends therapeutic efficacy while reducing dosing frequency in patient populations.",
+    "keywords": ["slow-release", "formulation", "drug", "delivery"],
+    "filing_date": "2021-05-10"
+  },
+  {
+    "id": "pat-uspto-001",
+    "source": "patent",
+    "source_url": "developer.uspto.gov/patent/US10123456",
+    "locator": "US10123456",
+    "title": "Extended-Release Pharmaceutical Formulation",
+    "snippet": "A method for preparing extended-release pharmaceutical formulations with improved bioavailability. The method covers novel polymeric carriers for controlled release of active pharmaceutical ingredients.",
+    "keywords": ["extended-release", "formulation", "drug", "slow-release"],
+    "filing_date": "2020-02-28"
+  }
+]

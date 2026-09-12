@@ -1,0 +1,38 @@
+[
+  {
+    "id": "trial-metformin-001",
+    "source": "trial_registry",
+    "source_url": "clinicaltrials.gov/api/NCT01234567",
+    "locator": "NCT01234567",
+    "title": "Metformin Efficacy in Type 2 Diabetes Prevention",
+    "topic": "metformin-diabetes",
+    "outcome": "Metformin significantly reduced progression to type 2 diabetes by 31% in prediabetic adults.",
+    "status": "completed",
+    "keywords": ["metformin", "diabetes", "prevention", "efficacy"],
+    "date": "2024-06-15"
+  },
+  {
+    "id": "trial-metformin-002",
+    "source": "trial_registry",
+    "source_url": "clinicaltrials.gov/api/NCT02345678",
+    "locator": "NCT02345678",
+    "title": "Long-term Safety and Efficacy of Metformin in Diabetes Prevention",
+    "topic": "metformin-diabetes",
+    "outcome": "After 5 years of follow-up, metformin showed no statistically significant benefit in preventing type 2 diabetes progression compared to placebo in the full population.",
+    "status": "completed",
+    "keywords": ["metformin", "diabetes", "prevention", "long-term"],
+    "date": "2025-02-01"
+  },
+  {
+    "id": "trial-aspirin-001",
+    "source": "trial_registry",
+    "source_url": "clinicaltrials.gov/api/NCT03456789",
+    "locator": "NCT03456789",
+    "title": "Aspirin for Primary Prevention of Cardiovascular Disease",
+    "topic": "aspirin-cardiovascular",
+    "outcome": "Aspirin reduced the risk of cardiovascular events in adults over 50 with no prior cardiovascular disease.",
+    "status": "completed",
+    "keywords": ["aspirin", "cardiovascular", "primary prevention"],
+    "date": "2025-01-10"
+  }
+]

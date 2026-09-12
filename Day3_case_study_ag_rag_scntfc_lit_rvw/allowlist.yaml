@@ -1,0 +1,30 @@
+sources:
+  - id: pubmed
+    type: literature
+    pattern: "eutils.ncbi.nlm.nih.gov/*"
+    owner: "lit-review-team"
+    last_reviewed: "2026-06-01"
+
+  - id: clinicaltrials_gov
+    type: trial_registry
+    pattern: "clinicaltrials.gov/api/*"
+    owner: "clin-ops"
+    last_reviewed: "2026-06-01"
+
+  - id: eppatent
+    type: patent
+    pattern: "data.epo.org/patent/*"
+    owner: "ip-team"
+    last_reviewed: "2026-06-01"
+
+  - id: uspto
+    type: patent
+    pattern: "developer.uspto.gov/*"
+    owner: "ip-team"
+    last_reviewed: "2024-12-01"
+
+  - id: internal_reports
+    type: internal
+    pattern: "reports.internal.corp/*"
+    owner: "rd-informatics"
+    last_reviewed: "2026-06-10"
