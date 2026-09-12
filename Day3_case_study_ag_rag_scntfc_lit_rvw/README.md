@@ -4,6 +4,19 @@ This is a fully functional, locally-runnable implementation of the design from [
 
 ## Quick Start
 
+### Option 1: Web Interface (Recommended)
+
+```bash
+pip install -r requirements.txt
+python3 web_server.py
+```
+
+Then open your browser: **http://localhost:5000**
+
+Submit a research question via the web form and see the full structured output, citations, and gaps in real-time.
+
+### Option 2: Command-Line Interface
+
 ```bash
 pip install -r requirements.txt
 python3 cli.py "What is the efficacy of metformin in preventing type 2 diabetes in prediabetic adults?"
@@ -144,6 +157,96 @@ This prototype is a **faithful but simplified** reference implementation:
 - **Conflicts**: Checked by comparing outcomes for the same topic across trials (works for the mock data).
 
 These simplifications are **intentional and documented**, not hidden. They stand in for their production equivalents without changing the contract or the audit trail.
+
+## Web Server & API
+
+### REST API Endpoint
+
+```bash
+POST http://localhost:5000/api/review
+Content-Type: application/json
+
+{
+  "question": "What is the efficacy of aspirin in preventing cardiovascular events?"
+}
+```
+
+### Response Format
+
+**Success (status: "success"):**
+```json
+{
+  "status": "success",
+  "question": "...",
+  "request_id": "...",
+  "output": {
+    "answer": "According to...",
+    "confidence": {
+      "level": "high|medium|low",
+      "basis": "N sources found across..."
+    },
+    "citations": [
+      {
+        "id": "literature-lit-001",
+        "source": "literature|patents|trial_registry|internal",
+        "locator": "PMID:12345678",
+        "snippet": "..."
+      }
+    ],
+    "gaps": ["gap 1", "gap 2"]
+  },
+  "audit": {
+    "retrieved_count": 5,
+    "allowlist_checks": 4,
+    "hook_log": [...]
+  }
+}
+```
+
+**Ambiguous Question (status: "clarify"):**
+```json
+{
+  "status": "clarify",
+  "question": "Is it good?",
+  "message": "Question is too ambiguous to scope. Please specify..."
+}
+```
+
+**Source Conflicts (status: "escalate"):**
+```json
+{
+  "status": "escalate",
+  "reason": "High-confidence source conflicts detected.",
+  "conflicts": ["metformin-diabetes: conflicting outcomes found across trials"]
+}
+```
+
+**No Results (status: "refuse"):**
+```json
+{
+  "status": "refuse",
+  "message": "No results found. Searched sources: ..."
+}
+```
+
+### Example cURL Requests
+
+```bash
+# Test success scenario
+curl -X POST http://localhost:5000/api/review \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Are there patents covering slow-release formulations filed after 2020?"}'
+
+# Test clarification
+curl -X POST http://localhost:5000/api/review \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Is it good?"}'
+
+# Test conflict detection
+curl -X POST http://localhost:5000/api/review \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What is the efficacy of metformin in preventing type 2 diabetes?"}'
+```
 
 ## Design Document
 
