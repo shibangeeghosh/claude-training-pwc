@@ -1,0 +1,29 @@
+# Source allowlist enforced before any retrieval runs (defense in depth: MCP connectors are
+# pre-scoped to one pattern each; the PreToolUse hook in .claude/hooks/check_allowlist.py is the
+# second, independent gate). Same schema as Day3_case_study_ag_rag_scntfc_lit_rvw/allowlist.yaml.
+sources:
+  - id: pubmed
+    type: literature
+    pattern: "eutils.ncbi.nlm.nih.gov/*"
+    owner: "lit-review-team"
+    last_reviewed: "2026-06-01"
+  - id: clinicaltrials_gov
+    type: trial_registry
+    pattern: "clinicaltrials.gov/api/*"
+    owner: "clinical-ops-team"
+    last_reviewed: "2026-05-15"
+  - id: eppatent
+    type: patent
+    pattern: "data.epo.org/patent/*"
+    owner: "ip-team"
+    last_reviewed: "2026-04-20"
+  - id: uspto
+    type: patent
+    pattern: "developer.uspto.gov/*"
+    owner: "ip-team"
+    last_reviewed: "2024-12-01"
+  - id: internal_reports
+    type: internal
+    pattern: "reports.internal.corp/*"
+    owner: "rd-informatics-team"
+    last_reviewed: "2026-07-01"

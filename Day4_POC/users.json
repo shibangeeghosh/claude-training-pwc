@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "username": "analyst",
+      "display_name": "R&D Literature Analyst",
+      "password_hash": "scrypt:32768:8:1$yCMW5dRBmcAUrFeV$fe0b3db62c4bc56de76d2816daf8cf8cad10faac3cc26197ec1f7846044a1db87221178c269c8ccb901113b43e56d38d0c3da03b38be398aca6b89cc00405548"
+    },
+    {
+      "username": "reviewer",
+      "display_name": "Scientific Reviewer",
+      "password_hash": "scrypt:32768:8:1$b0D9ozPulGXWGucS$d417e52232d0fec510af2c3416bbb15a3739dc50b536d2fa7f1c27a982f6488c340ecfbeb2ea977f410199df7c200107348a7e3f239cfe67e6e23526abbf0e3a"
+    }
+  ]
+}

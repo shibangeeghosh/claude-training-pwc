@@ -1,0 +1,46 @@
+[
+  {
+    "id": "EP001",
+    "domain": "oncology",
+    "source": "eppatent",
+    "source_url": "data.epo.org/patent/EP4001001",
+    "locator": "EP4001001",
+    "title": "Slow-release formulation of PARP inhibitor for combination oncology therapy",
+    "snippet": "Patent describes a matrix-controlled slow-release oral formulation of a PARP inhibitor intended to reduce peak plasma concentration and associated GI toxicity in combination chemotherapy regimens.",
+    "keywords": ["parp", "oncology", "cancer", "formulation"],
+    "date": "2025-05-14"
+  },
+  {
+    "id": "US001",
+    "domain": "diabetes_metabolic",
+    "source": "uspto",
+    "source_url": "developer.uspto.gov/ptab-api/patents/US1002002",
+    "locator": "US1002002",
+    "title": "Slow-release oral formulation of metformin for improved gastrointestinal tolerability",
+    "snippet": "Patent claims a slow-release oral metformin formulation using a polymer matrix designed to reduce gastrointestinal adverse events relative to immediate-release tablets.",
+    "keywords": ["metformin", "diabetes", "formulation", "metabolic"],
+    "date": "2021-03-02"
+  },
+  {
+    "id": "EP010",
+    "domain": "cardiovascular",
+    "source": "eppatent",
+    "source_url": "data.epo.org/patent/EP4010010",
+    "locator": "EP4010010",
+    "title": "Combination formulation of SGLT2 inhibitor and antihypertensive agent",
+    "snippet": "Patent describes a fixed-dose combination tablet of an SGLT2 inhibitor and an antihypertensive agent for once-daily dosing in resistant hypertension.",
+    "keywords": ["cardiovascular", "hypertension", "cardiac", "formulation"],
+    "date": "2025-06-21"
+  },
+  {
+    "id": "EP040",
+    "domain": "infectious_disease",
+    "source": "eppatent",
+    "source_url": "data.epo.org/patent/EP4040040",
+    "locator": "EP4040040",
+    "title": "Stable lyophilized formulation of a broad-spectrum antiviral compound",
+    "snippet": "Patent covers a lyophilized formulation intended to extend shelf-stability of a broad-spectrum antiviral compound for field deployment.",
+    "keywords": ["antiviral", "infection", "pathogen", "formulation"],
+    "date": "2026-01-09"
+  }
+]

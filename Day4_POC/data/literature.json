@@ -1,0 +1,90 @@
+[
+  {
+    "id": "PMID001",
+    "domain": "oncology",
+    "source": "pubmed",
+    "source_url": "eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?id=PMID001",
+    "locator": "PMID:33221001",
+    "title": "PARP inhibitor combination therapy in BRCA-mutated ovarian cancer: a phase II review",
+    "snippet": "Combination of a PARP inhibitor with low-dose chemotherapy improved progression-free survival by 4.2 months in BRCA1/2-mutated ovarian cancer cohorts compared to monotherapy.",
+    "keywords": ["parp", "brca", "ovarian", "cancer", "chemotherapy", "oncology"],
+    "date": "2025-11-03"
+  },
+  {
+    "id": "PMID002",
+    "domain": "oncology",
+    "source": "pubmed",
+    "source_url": "eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?id=PMID002",
+    "locator": "PMID:33221045",
+    "title": "Tumor microenvironment remodeling as a resistance mechanism to checkpoint inhibitors",
+    "snippet": "Fibroblast-driven remodeling of the tumor microenvironment was associated with reduced T-cell infiltration and acquired resistance to PD-1 checkpoint inhibitors in carcinoma models.",
+    "keywords": ["tumor", "carcinoma", "checkpoint", "resistance", "oncology"],
+    "date": "2026-01-18"
+  },
+  {
+    "id": "PMID010",
+    "domain": "cardiovascular",
+    "source": "pubmed",
+    "source_url": "eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?id=PMID010",
+    "locator": "PMID:34110023",
+    "title": "SGLT2 inhibitors and cardiovascular outcomes in patients with resistant hypertension",
+    "snippet": "SGLT2 inhibitor add-on therapy reduced systolic blood pressure by an average of 6 mmHg and lowered heart-failure hospitalization risk in patients with resistant hypertension.",
+    "keywords": ["cardiac", "cardiovascular", "hypertension", "heart"],
+    "date": "2025-09-27"
+  },
+  {
+    "id": "PMID011",
+    "domain": "cardiovascular",
+    "source": "pubmed",
+    "source_url": "eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?id=PMID011",
+    "locator": "PMID:34110099",
+    "title": "Atrial fibrillation ablation outcomes in patients with concurrent heart failure",
+    "snippet": "Catheter ablation for atrial fibrillation showed durable sinus rhythm maintenance at 12 months in a majority of patients with concurrent heart failure with reduced ejection fraction.",
+    "keywords": ["atrial", "cardiac", "heart", "cardiovascular"],
+    "date": "2026-02-09"
+  },
+  {
+    "id": "PMID020",
+    "domain": "diabetes_metabolic",
+    "source": "pubmed",
+    "source_url": "eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?id=PMID020",
+    "locator": "PMID:35009812",
+    "title": "Metformin extended-release formulation and glycemic control in type 2 diabetes",
+    "snippet": "Extended-release metformin achieved comparable glycemic control to immediate-release formulations with a significant reduction in gastrointestinal adverse events.",
+    "keywords": ["metformin", "diabetes", "glucose", "metabolic"],
+    "date": "2025-08-14"
+  },
+  {
+    "id": "PMID021",
+    "domain": "diabetes_metabolic",
+    "source": "pubmed",
+    "source_url": "eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?id=PMID021",
+    "locator": "PMID:35009877",
+    "title": "GLP-1 receptor agonists as adjunct therapy in insulin-resistant type 2 diabetes",
+    "snippet": "GLP-1 receptor agonist add-on therapy improved insulin sensitivity markers and produced modest weight loss over a 26-week treatment period in insulin-resistant patients.",
+    "keywords": ["insulin", "diabetes", "glucose", "metabolic"],
+    "date": "2026-03-05"
+  },
+  {
+    "id": "PMID030",
+    "domain": "neurology",
+    "source": "pubmed",
+    "source_url": "eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?id=PMID030",
+    "locator": "PMID:36004112",
+    "title": "Anti-amyloid monoclonal antibody therapy and cognitive decline in early Alzheimer's disease",
+    "snippet": "Anti-amyloid monoclonal antibody treatment slowed the rate of cognitive decline on standard composite scores over 18 months in early symptomatic Alzheimer's disease.",
+    "keywords": ["alzheimer", "neuro", "cognitive"],
+    "date": "2025-12-22"
+  },
+  {
+    "id": "PMID040",
+    "domain": "infectious_disease",
+    "source": "pubmed",
+    "source_url": "eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?id=PMID040",
+    "locator": "PMID:37102255",
+    "title": "Broad-spectrum antiviral candidate efficacy against emerging respiratory pathogens",
+    "snippet": "A broad-spectrum antiviral candidate reduced viral load by two orders of magnitude in vitro against several emerging respiratory pathogens, with favorable early safety signals.",
+    "keywords": ["antiviral", "infection", "pathogen", "vaccine"],
+    "date": "2026-04-11"
+  }
+]

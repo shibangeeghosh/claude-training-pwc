@@ -1,0 +1,80 @@
+[
+  {
+    "id": "NCT001",
+    "domain": "oncology",
+    "source": "clinicaltrials_gov",
+    "source_url": "clinicaltrials.gov/api/v2/studies/NCT05001001",
+    "locator": "NCT05001001",
+    "title": "Phase II trial of PARP inhibitor + chemotherapy in BRCA-mutated ovarian cancer",
+    "snippet": "Randomized phase II trial; combination arm met the primary progression-free survival endpoint versus monotherapy control.",
+    "keywords": ["parp", "brca", "ovarian", "cancer", "oncology"],
+    "topic": "parp-ovarian-cancer",
+    "outcome": "combination arm improved progression-free survival vs monotherapy",
+    "date": "2025-10-01"
+  },
+  {
+    "id": "NCT010",
+    "domain": "cardiovascular",
+    "source": "clinicaltrials_gov",
+    "source_url": "clinicaltrials.gov/api/v2/studies/NCT05010010",
+    "locator": "NCT05010010",
+    "title": "SGLT2 inhibitor add-on in resistant hypertension with heart failure risk",
+    "snippet": "Trial met secondary endpoint of reduced heart-failure hospitalization at 12 months; blood pressure reduction was statistically significant.",
+    "keywords": ["cardiac", "cardiovascular", "hypertension", "heart"],
+    "topic": "sglt2-hypertension",
+    "outcome": "reduced heart-failure hospitalization and blood pressure",
+    "date": "2025-09-20"
+  },
+  {
+    "id": "NCT020",
+    "domain": "diabetes_metabolic",
+    "source": "clinicaltrials_gov",
+    "source_url": "clinicaltrials.gov/api/v2/studies/NCT05020020",
+    "locator": "NCT05020020",
+    "title": "Metformin extended-release vs immediate-release: glycemic outcomes in type 2 diabetes",
+    "snippet": "Extended-release arm showed non-inferior HbA1c reduction with significantly fewer GI adverse events than immediate-release arm.",
+    "keywords": ["metformin", "diabetes", "glucose", "metabolic"],
+    "topic": "metformin-diabetes",
+    "outcome": "extended-release non-inferior on glycemic control, better tolerability",
+    "date": "2025-07-30"
+  },
+  {
+    "id": "NCT021",
+    "domain": "diabetes_metabolic",
+    "source": "clinicaltrials_gov",
+    "source_url": "clinicaltrials.gov/api/v2/studies/NCT05020021",
+    "locator": "NCT05020021",
+    "title": "Metformin extended-release: real-world glycemic control cohort study",
+    "snippet": "Real-world cohort found extended-release metformin underperformed immediate-release on HbA1c reduction in patients with baseline eGFR below 60.",
+    "keywords": ["metformin", "diabetes", "glucose", "metabolic"],
+    "topic": "metformin-diabetes",
+    "outcome": "extended-release underperformed immediate-release in reduced-renal-function patients",
+    "date": "2026-01-12"
+  },
+  {
+    "id": "NCT030",
+    "domain": "neurology",
+    "source": "clinicaltrials_gov",
+    "source_url": "clinicaltrials.gov/api/v2/studies/NCT05030030",
+    "locator": "NCT05030030",
+    "title": "Anti-amyloid antibody trial in early symptomatic Alzheimer's disease",
+    "snippet": "Trial met primary endpoint on composite cognitive decline scale at 18 months versus placebo.",
+    "keywords": ["alzheimer", "neuro", "cognitive"],
+    "topic": "anti-amyloid-alzheimer",
+    "outcome": "slowed cognitive decline vs placebo",
+    "date": "2025-11-19"
+  },
+  {
+    "id": "NCT040",
+    "domain": "infectious_disease",
+    "source": "clinicaltrials_gov",
+    "source_url": "clinicaltrials.gov/api/v2/studies/NCT05040040",
+    "locator": "NCT05040040",
+    "title": "Phase I safety trial of broad-spectrum antiviral candidate",
+    "snippet": "Phase I trial reported no serious adverse events at therapeutic dose range; pharmacokinetics supported once-daily dosing.",
+    "keywords": ["antiviral", "infection", "pathogen"],
+    "topic": "antiviral-respiratory",
+    "outcome": "acceptable safety profile, supports once-daily dosing",
+    "date": "2026-02-28"
+  }
+]

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Agentic RAG for Literature Review &amp; Drug-Discovery Intelligence &mdash; Login</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; display: flex;
+         align-items: center; justify-content: center; height: 100vh; margin: 0; }
+  .card { background: #1e293b; padding: 2.75rem; border-radius: 12px; width: 360px;
+          border-top: 3px solid #6366f1;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.35), 0 24px 48px -12px rgba(0,0,0,0.55); }
+  h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.35; margin: 0 0 0.9rem; }
+  p.sub { color: #94a3b8; margin: 0; font-size: 0.85rem; line-height: 1.5; }
+  .steps { display: flex; align-items: center; gap: 0.4rem; margin: 0.9rem 0 1.75rem; }
+  .step-dot { width: 9px; height: 9px; border-radius: 50%; border: 2px solid #334155; background: transparent;
+              transition: background 200ms ease, border-color 200ms ease, box-shadow 200ms ease; }
+  .step-dot.completed { background: #6366f1; border-color: #6366f1; }
+  .step-dot.current { background: #6366f1; border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99,102,241,0.22); }
+  .steps .step-label { font-size: 0.75rem; color: #94a3b8; margin-left: 0.35rem; }
+  label { display: block; font-size: 0.85rem; margin-bottom: 0.4rem; color: #cbd5e1; }
+  input { width: 100%; padding: 0.65rem 0.75rem; margin-bottom: 1.15rem; border-radius: 6px; border: 1px solid #334155;
+          background: #0f172a; color: #e2e8f0; font-size: 0.95rem; line-height: 1.5;
+          transition: border-color 180ms ease, box-shadow 180ms ease; }
+  input:hover { border-color: #475569; }
+  input:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.28); }
+  button { width: 100%; padding: 0.75rem; border-radius: 6px; border: none; background: #6366f1;
+           color: white; font-weight: 600; font-size: 0.95rem; cursor: pointer; letter-spacing: 0.01em;
+           display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+           transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
+  button:hover { background: #4f46e5; box-shadow: 0 8px 20px -6px rgba(99,102,241,0.55); }
+  button:active { transform: translateY(1px); }
+  button:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.35); }
+  button .arrow { transition: transform 180ms ease; }
+  button:hover .arrow { transform: translateX(2px); }
+  .error { background: #7f1d1d; color: #fecaca; padding: 0.65rem 0.8rem; border-radius: 6px; margin-bottom: 1.15rem; font-size: 0.85rem; line-height: 1.5; }
+  .hint { margin-top: 1.5rem; font-size: 0.75rem; color: #64748b; line-height: 1.6; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Agentic RAG for Literature Review &amp; Drug-Discovery Intelligence</h1>
+    <p class="sub">Sign in to begin</p>
+    <div class="steps" aria-label="Step 1 of 3">
+      <span class="step-dot current"></span>
+      <span class="step-dot"></span>
+      <span class="step-dot"></span>
+      <span class="step-label">Step 1 of 3</span>
+    </div>
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <form method="post">
+      <label for="username">Username</label>
+      <input id="username" name="username" autocomplete="username" required>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required>
+      <button type="submit">Sign in <span class="arrow">&rarr;</span></button>
+    </form>
+    <div class="hint">Demo users: analyst / demo1234, reviewer / review1234</div>
+  </div>
+</body>
+</html>
