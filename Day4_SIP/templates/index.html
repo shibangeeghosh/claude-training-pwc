@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SIP Calculator</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 480px; margin: 40px auto; padding: 0 16px; color: #1a1a1a; }
+  h1 { font-size: 1.4rem; }
+  label { display: block; margin-top: 16px; font-weight: 600; font-size: 0.9rem; }
+  input { width: 100%; padding: 8px; margin-top: 4px; font-size: 1rem; box-sizing: border-box; }
+  button { margin-top: 20px; padding: 10px 16px; font-size: 1rem; cursor: pointer; }
+  #result { margin-top: 24px; padding: 16px; background: #f4f6f8; border-radius: 8px; display: none; }
+  #result div { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  #error { color: #b00020; margin-top: 12px; }
+</style>
+</head>
+<body>
+  <h1>SIP Calculator</h1>
+  <label for="monthly_investment">Monthly investment (₹)</label>
+  <input id="monthly_investment" type="number" value="5000" min="1">
+
+  <label for="annual_return_pct">Expected annual return (%)</label>
+  <input id="annual_return_pct" type="number" value="12" min="0" step="0.1">
+
+  <label for="years">Investment period (years)</label>
+  <input id="years" type="number" value="10" min="1" step="0.5">
+
+  <button id="calculate">Calculate</button>
+
+  <div id="error"></div>
+  <div id="result">
+    <div><span>Invested amount</span><strong id="out_invested"></strong></div>
+    <div><span>Estimated returns</span><strong id="out_returns"></strong></div>
+    <div><span>Maturity value</span><strong id="out_maturity"></strong></div>
+  </div>
+
+<script>
+const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+
+document.getElementById('calculate').addEventListener('click', async () => {
+  const errorEl = document.getElementById('error');
+  const resultEl = document.getElementById('result');
+  errorEl.textContent = '';
+  resultEl.style.display = 'none';
+
+  const body = {
+    monthly_investment: document.getElementById('monthly_investment').value,
+    annual_return_pct: document.getElementById('annual_return_pct').value,
+    years: document.getElementById('years').value,
+  };
+
+  const res = await fetch('/api/calculate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+
+  if (!res.ok) {
+    errorEl.textContent = data.error || 'Something went wrong';
+    return;
+  }
+
+  document.getElementById('out_invested').textContent = fmt.format(data.invested_amount);
+  document.getElementById('out_returns').textContent = fmt.format(data.estimated_returns);
+  document.getElementById('out_maturity').textContent = fmt.format(data.maturity_value);
+  resultEl.style.display = 'block';
+});
+</script>
+</body>
+</html>
