@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Carta Healthcare POC — Groq API Key</title>
+  <style>
+    body { background: #0f1115; color: #e6e6e6; font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    .card { background: #1a1d24; border: 1px solid #2a2e38; border-radius: 8px; padding: 32px; width: 380px; }
+    h1 { font-size: 18px; margin: 0 0 4px; }
+    .step { color: #7a8296; font-size: 12px; margin-bottom: 20px; }
+    label { display: block; font-size: 13px; margin-bottom: 6px; color: #b7bcc7; }
+    input, select { width: 100%; padding: 8px 10px; margin-bottom: 16px; border-radius: 4px; border: 1px solid #333844; background: #10121a; color: #e6e6e6; box-sizing: border-box; }
+    button { width: 100%; padding: 10px; background: #3b6fe0; border: none; border-radius: 4px; color: white; font-size: 14px; cursor: pointer; }
+    button:hover { background: #4a7cf0; }
+    .error { color: #ef6a6a; font-size: 13px; margin-bottom: 12px; }
+    .hint { color: #5c6377; font-size: 11px; margin-top: 16px; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Carta Healthcare — Clinical Extraction POC</h1>
+    <div class="step">Step 3 of 3 — Groq API key &amp; model</div>
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <form method="POST" action="{{ url_for('api_key') }}">
+      <label for="api_key">Groq API key</label>
+      <input type="password" id="api_key" name="api_key" autocomplete="off" required />
+
+      <label for="model">Model</label>
+      <select id="model" name="model">
+        {% for choice in models %}
+        <option value="{{ choice }}" {% if choice == default_model %}selected{% endif %}>{{ choice }}</option>
+        {% endfor %}
+      </select>
+
+      <button type="submit">Continue</button>
+    </form>
+    <div class="hint">
+      Used only for this browser session; never written to disk or logs. Get a key at
+      console.groq.com. Default model: {{ default_model }}.
+    </div>
+  </div>
+</body>
+</html>

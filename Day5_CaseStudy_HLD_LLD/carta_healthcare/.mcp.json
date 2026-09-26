@@ -1,0 +1,1 @@
+{"mcpServers": {"carta-clinical": {"command": "python3", "args": ["mcp_clinical_server.py"], "env": {}, "type": "stdio"}}}

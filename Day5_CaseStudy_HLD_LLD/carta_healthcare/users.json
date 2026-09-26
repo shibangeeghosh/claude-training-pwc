@@ -1,0 +1,10 @@
+{
+  "abstractor1": {
+    "password_hash": "scrypt:32768:8:1$OWuNAJqpIeptwTTZ$0505b03f78513ce632af553a67aa9a7018fa749c68c720ba9f4714a98f0b030528f4330327121677b8642bd1e36dbeea6186cb522b44ec3c40bd310d8712752a",
+    "display_name": "Demo Abstractor One"
+  },
+  "abstractor2": {
+    "password_hash": "scrypt:32768:8:1$lFZO1nmtDKwXAySp$bf46710228a84c113634576f7cf4ac0ad22374aed14c58252b2b2dcec4fd5738515eab39dd3c767de618031d4874007b7552264cc0bad1bad48dc576c610de2c",
+    "display_name": "Demo Abstractor Two"
+  }
+}
