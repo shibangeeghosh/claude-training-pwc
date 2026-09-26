@@ -1,5 +1,0 @@
-__pycache__/
-*.pyc
-.env
-audit_log.jsonl
-phi_guard_audit.log
