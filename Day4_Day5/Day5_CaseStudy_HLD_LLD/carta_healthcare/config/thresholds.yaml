@@ -1,7 +1,0 @@
-# Confidence/validation thresholds used across the pipeline.
-# Kept in one file (not hardcoded in src/) so tuning doesn't require a code change.
-
-classification_confidence_min: 0.60   # below this, document routes to a document-level exception
-extraction_confidence_min: 0.60       # below this, the extracted field routes to exception
-cross_check_sample_rate: 0.34         # fraction of high-criticality fields dual-extracted and compared
-rag_min_score: 0.15                   # below this TF-IDF cosine score, no confident coding match

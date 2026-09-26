@@ -1,1 +1,0 @@
-{"nodes": [{"id": "observability_tempo", "label": "Tempo Config (OTLP receivers, local trace storage)", "file_type": "code", "source_file": "observability/tempo.yaml", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [], "hyperedges": []}
