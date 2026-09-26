@@ -1,0 +1,6 @@
+{
+  "mcpServers": {
+    "lit-review": { "command": "python3", "args": ["mcp_lit_review_server.py"], "env": {}, "type": "stdio" },
+    "k6": { "command": "k6", "args": ["x", "mcp"], "type": "stdio" }
+  }
+}

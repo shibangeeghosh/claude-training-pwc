@@ -1,0 +1,27 @@
+spec_id: discharge_summary_v1
+document_type: discharge_summary
+version: 1
+fields:
+  - field_name: primary_diagnosis
+    data_type: string
+    expected_format: free_text
+    coding_standard: icd10
+    criticality: high
+
+  - field_name: procedures_performed
+    data_type: string
+    expected_format: free_text
+    coding_standard: cpt
+    criticality: high
+
+  - field_name: discharge_disposition
+    data_type: string
+    expected_format: free_text
+    coding_standard: null
+    criticality: standard
+
+  - field_name: length_of_stay_days
+    data_type: integer
+    expected_format: number
+    coding_standard: null
+    criticality: standard

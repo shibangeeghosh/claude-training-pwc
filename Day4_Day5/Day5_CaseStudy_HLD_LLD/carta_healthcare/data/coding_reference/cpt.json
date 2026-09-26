@@ -1,0 +1,26 @@
+[
+  {
+    "code": "33533",
+    "description": "Coronary artery bypass, using arterial graft; single graft",
+    "synonyms": ["coronary artery bypass grafting", "CABG", "coronary artery bypass graft"],
+    "coding_standard": "cpt"
+  },
+  {
+    "code": "44970",
+    "description": "Laparoscopy, surgical, appendectomy",
+    "synonyms": ["laparoscopic appendectomy"],
+    "coding_standard": "cpt"
+  },
+  {
+    "code": "47562",
+    "description": "Laparoscopic cholecystectomy",
+    "synonyms": ["laparoscopic cholecystectomy", "gallbladder removal"],
+    "coding_standard": "cpt"
+  },
+  {
+    "code": "19120",
+    "description": "Excision of cyst, fibroadenoma, or other benign or malignant tumor of the breast",
+    "synonyms": ["breast biopsy excision", "breast lesion excision"],
+    "coding_standard": "cpt"
+  }
+]

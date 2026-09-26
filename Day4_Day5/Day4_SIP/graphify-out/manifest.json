@@ -1,0 +1,50 @@
+{
+  ".mcp.json": {
+    "mtime": 1789794692.3824964,
+    "seen": 1789795429.6810102,
+    "ast_hash": "ca00496b69e86f2244914c449c6fcc7a",
+    "semantic_hash": "ca00496b69e86f2244914c449c6fcc7a"
+  },
+  "app.py": {
+    "mtime": 1789794576.4600308,
+    "seen": 1789795429.6810184,
+    "ast_hash": "4e45da55594a7a7e3a083095dc36d9ea",
+    "semantic_hash": "4e45da55594a7a7e3a083095dc36d9ea"
+  },
+  "fund_data_mcp_server.py": {
+    "mtime": 1789794677.0927508,
+    "seen": 1789795429.6810212,
+    "ast_hash": "105bd58fde43198b7cf92ab7fca67c48",
+    "semantic_hash": "105bd58fde43198b7cf92ab7fca67c48"
+  },
+  "sip_calculator.py": {
+    "mtime": 1789794565.260969,
+    "seen": 1789795429.6810226,
+    "ast_hash": "ed7933f335b796a47393e02ffcf5e3c9",
+    "semantic_hash": "ed7933f335b796a47393e02ffcf5e3c9"
+  },
+  ".claude/agents/sip-backend.md": {
+    "mtime": 1789794633.5052524,
+    "seen": 1789795429.6810246,
+    "ast_hash": "64f6ecd737121f46afe305ca6668e41f",
+    "semantic_hash": "64f6ecd737121f46afe305ca6668e41f"
+  },
+  "README.md": {
+    "mtime": 1789794729.1382835,
+    "seen": 1789795429.681026,
+    "ast_hash": "eeb8bbdd6d230f9ee1d7f2738911ccde",
+    "semantic_hash": "eeb8bbdd6d230f9ee1d7f2738911ccde"
+  },
+  "requirements.txt": {
+    "mtime": 1789794607.4457145,
+    "seen": 1789795429.6810277,
+    "ast_hash": "d0bfeb73d077b4f02c0f011fb3b2877a",
+    "semantic_hash": "d0bfeb73d077b4f02c0f011fb3b2877a"
+  },
+  "templates/index.html": {
+    "mtime": 1789794598.9369776,
+    "seen": 1789795429.6810288,
+    "ast_hash": "8a14407e0cffc3d90eeebb96f67b950d",
+    "semantic_hash": "8a14407e0cffc3d90eeebb96f67b950d"
+  }
+}

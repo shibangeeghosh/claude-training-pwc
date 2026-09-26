@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Agentic RAG for Literature Review &amp; Drug-Discovery Intelligence</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; margin: 0; line-height: 1.5; }
+  header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem;
+           background: #1e293b; border-bottom: 1px solid #334155; }
+  .header-left { display: flex; align-items: center; gap: 0.85rem; }
+  .logo-mark { flex: none; }
+  header h1 { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; margin: 0; }
+  header .meta { font-size: 0.8rem; color: #94a3b8; margin-top: 0.15rem; }
+  header nav { display: flex; align-items: center; gap: 0.35rem; }
+  header nav a { color: #cbd5e1; text-decoration: none; font-size: 0.8rem; padding: 0.45rem 0.9rem;
+                 border-radius: 999px; background: transparent; transition: background 180ms ease, color 180ms ease; }
+  header nav a:hover { background: #334155; color: #f1f5f9; }
+  main { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; padding: 1.75rem 2rem; max-width: 1200px; margin: 0 auto; }
+  .panel { background: #1e293b; border-radius: 10px; padding: 1.6rem; border: 1px solid #334155;
+           border-top: 3px solid #6366f1;
+           box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 18px 36px -14px rgba(0,0,0,0.5); }
+  textarea { width: 100%; min-height: 120px; padding: 0.75rem; border-radius: 6px; border: 1px solid #334155;
+             background: #0f172a; color: #e2e8f0; resize: vertical; font: inherit; line-height: 1.5;
+             transition: border-color 180ms ease, box-shadow 180ms ease; }
+  textarea:hover { border-color: #475569; }
+  textarea:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.28); }
+  button { padding: 0.65rem 1.2rem; border-radius: 6px; border: none; background: #6366f1; color: white;
+           font-weight: 600; font-size: 0.9rem; cursor: pointer; margin-top: 0.85rem; margin-right: 0.5rem;
+           transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
+  button:hover { background: #4f46e5; box-shadow: 0 8px 18px -6px rgba(99,102,241,0.5); }
+  button:active { transform: translateY(1px); }
+  button:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.35); }
+  button.reject { background: #64748b; }
+  button.reject:hover { background: #475569; box-shadow: 0 8px 18px -6px rgba(71,85,105,0.5); }
+  .examples button { background: #334155; font-weight: 400; font-size: 0.8rem; }
+  .examples button:hover { background: #475569; box-shadow: none; }
+  .badge { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.32rem 0.85rem; border-radius: 999px;
+           font-size: 0.78rem; font-weight: 700; letter-spacing: 0.01em; }
+  .badge .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
+  .badge.high { background: #065f46; color: #6ee7b7; }
+  .badge.medium { background: #78350f; color: #fbbf24; }
+  .badge.low { background: #7f1d1d; color: #fecaca; }
+  .status { font-weight: 700; letter-spacing: 0.01em; margin-bottom: 0.75rem; }
+  .status.pending_review, .status.approved { color: #6ee7b7; }
+  .status.refuse, .status.rejected, .status.error { color: #fca5a5; }
+  .status.escalate, .status.clarify { color: #fbbf24; }
+  .citations-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.6rem; }
+  .citation, .gap { background: #0f172a; border-radius: 6px; padding: 0.65rem 0.85rem; margin-bottom: 0;
+                     font-size: 0.85rem; line-height: 1.55; border-left: 3px solid #6366f1;
+                     transition: box-shadow 220ms ease, border-color 220ms ease, background 220ms ease; }
+  .gap { margin-bottom: 0.6rem; }
+  .citation .locator { color: #a5b4fc; font-weight: 600; }
+  .citation.flash { border-color: #a5b4fc; box-shadow: 0 0 0 2px rgba(165,180,252,0.45); background: #16213d; }
+  .gap { color: #fbbf24; border-left-color: #f59e0b; }
+  .prefix-icon { margin-right: 0.35rem; }
+  h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; color: #94a3b8; margin: 1.5rem 0 0.65rem; }
+  h3:first-child { margin-top: 0; }
+  #answer { font-size: 1.03rem; line-height: 1.75; margin: 0.75rem 0; color: #f1f5f9; }
+  .citation-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 1.15rem;
+                     height: 1.15rem; padding: 0 0.32rem; margin: 0 0.1rem; border-radius: 999px;
+                     background: #6366f1; color: #ffffff; font-weight: 700; font-size: 0.68rem;
+                     line-height: 1; vertical-align: super; text-decoration: none; cursor: pointer;
+                     transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease; }
+  .citation-badge:hover { background: #818cf8; transform: scale(1.18); box-shadow: 0 4px 10px -2px rgba(99,102,241,0.6); }
+  .placeholder { color: #64748b; font-size: 0.85rem; }
+  .loading { display: flex; align-items: center; gap: 0.65rem; color: #64748b; font-size: 0.85rem; }
+  .spinner { width: 20px; height: 20px; border-radius: 50%; border: 3px solid #334155; border-top-color: #6366f1;
+             flex: none; animation: spin 800ms linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .result-fade { opacity: 0; transform: translateY(8px); transition: opacity 260ms ease, transform 260ms ease; }
+  .result-fade.show { opacity: 1; transform: translateY(0); }
+  button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .badge.scope { background: #312e81; color: #c7d2fe; }
+  .examples button.active { background: #6366f1; color: white; }
+  .history-entry { border-top: 1px solid #334155; margin-top: 1rem; padding-top: 1rem; }
+  .history-question { font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.5rem; }
+  @media (max-width: 800px) {
+    main { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <svg class="logo-mark" width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+      <circle cx="17" cy="17" r="17" fill="#6366f1"></circle>
+      <text x="17" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="system-ui, sans-serif">R</text>
+    </svg>
+    <div>
+      <h1>Agentic RAG &mdash; Literature Review &amp; Drug-Discovery Intelligence</h1>
+      <div class="meta">{{ display_name }}
+        <span class="badge scope"><span class="dot"></span>{{ domain.label }} &middot; {{ model }}</span>
+      </div>
+    </div>
+  </div>
+  <nav>
+    <a href="/domain">Change domain</a>
+    <a href="/api-key">Change API key/model</a>
+    <a href="/logout">Log out</a>
+  </nav>
+</header>
+<main>
+  <div class="panel">
+    <h3>Research question</h3>
+    <textarea id="question" placeholder="e.g. Does extended-release metformin reduce GI adverse events versus immediate-release formulations?"></textarea>
+    <div>
+      <button id="submit-btn" onclick="submitQuestion()">Submit</button>
+      <button class="reject" onclick="document.getElementById('question').value=''">Clear</button>
+    </div>
+    <h3>Try an example</h3>
+    <div class="examples">
+      <button onclick="runExample('Does extended-release metformin reduce GI adverse events versus immediate-release formulations?', this)">Grounded answer</button>
+      <button onclick="runExample('What is the evidence on extended-release metformin glycemic control?', this)">Conflict / escalate</button>
+      <button onclick="runExample('tell me about it', this)">Ambiguous / clarify</button>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Result</h3>
+    <div id="result" aria-live="polite" aria-busy="false"><p class="placeholder">Submit a question to see the structured, grounded result here.</p></div>
+    <div id="history"></div>
+  </div>
+</main>
+<script>
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// Mirrors the backend's bracket-content scan (src/grounding.py's _extract_cited_ids) so inline
+// [type-id] tags in the (already-escaped) answer can be swapped for numbered footnote badges
+// instead of showing up as raw bracketed debug text -- including the rarer case where a richer
+// draft stuffs more than one id into a single bracket, e.g. "[trial_registry-NCT020, literature-PMID001]".
+const BRACKET_CONTENT_RE = /\[([^\[\]]*)\]/g;
+const CITATION_ID_RE = /(?:literature|trial_registry|patent|internal)-[A-Za-z0-9_]+/g;
+
+function badgifyAnswer(escapedAnswer, citations, requestId) {
+  const idToIndex = {};
+  (citations || []).forEach((c, i) => { idToIndex[c.id] = i + 1; });
+  return escapedAnswer.replace(BRACKET_CONTENT_RE, (fullMatch, bracketContent) => {
+    const ids = bracketContent.match(CITATION_ID_RE);
+    if (!ids || !ids.length) return fullMatch; // not a citation bracket, leave untouched
+    const badges = ids.map(id => idToIndex[id]);
+    if (badges.some(idx => !idx)) return fullMatch; // unknown id inside -- leave raw rather than partially render
+    return badges.map(idx => `<a href="#citation-${requestId}-${idx}" class="citation-badge" onclick="return highlightCitation('${requestId}', ${idx});">${idx}</a>`).join('');
+  });
+}
+
+// requestId scopes the DOM id per result -- once history can show multiple past results at
+// once (see resultHistory below), a bare "citation-1" would collide across entries.
+function highlightCitation(requestId, idx) {
+  const card = document.getElementById(`citation-${requestId}-${idx}`);
+  if (card) {
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    card.classList.add('flash');
+    setTimeout(() => card.classList.remove('flash'), 1200);
+  }
+  return false;
+}
+
+let lastQuestion = null;
+const resultHistory = [];
+
+function runExample(text, btn) {
+  document.querySelectorAll('.examples button').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.getElementById('question').value = text;
+  submitQuestion();
+}
+
+function renderFade(html) {
+  const resultEl = document.getElementById('result');
+  resultEl.innerHTML = `<div class="result-fade" id="result-fade-wrap">${html}</div>`;
+  resultEl.setAttribute('aria-busy', 'false');
+  requestAnimationFrame(() => {
+    const wrap = document.getElementById('result-fade-wrap');
+    if (wrap) wrap.classList.add('show');
+  });
+}
+
+function renderHistoryList() {
+  const historyEl = document.getElementById('history');
+  historyEl.innerHTML = resultHistory.map(entry =>
+    `<div class="history-entry"><div class="history-question">Q: ${escapeHtml(entry.question)}</div>${entry.html}</div>`
+  ).join('');
+}
+
+// Archives whatever is currently live in #result -- including any status change decide()
+// already mutated into it -- before the next question overwrites it with a fresh result.
+function archiveCurrentResult() {
+  const wrap = document.getElementById('result-fade-wrap');
+  if (wrap && lastQuestion !== null) {
+    resultHistory.unshift({ question: lastQuestion, html: wrap.innerHTML });
+    renderHistoryList();
+  }
+}
+
+function finishResult(question, html) {
+  renderFade(html);
+  lastQuestion = question;
+}
+
+async function submitQuestion() {
+  const question = document.getElementById('question').value;
+  const resultEl = document.getElementById('result');
+  const submitBtn = document.getElementById('submit-btn');
+  const originalLabel = submitBtn.textContent;
+  archiveCurrentResult();
+  resultEl.setAttribute('aria-busy', 'true');
+  resultEl.innerHTML = '<div class="loading"><span class="spinner"></span><span>Running the agent loop&hellip;</span></div>';
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Running…';
+  try {
+    const resp = await fetch('/api/review', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question })
+    });
+    const data = await resp.json();
+    finishResult(question, buildResultHtml(data));
+  } catch (err) {
+    finishResult(question, `<div class="status error">Request failed: ${escapeHtml(String(err))}</div>`);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalLabel;
+  }
+}
+
+document.getElementById('question').addEventListener('keydown', function (e) {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    e.preventDefault();
+    if (!document.getElementById('submit-btn').disabled) submitQuestion();
+  }
+});
+
+document.getElementById('question').addEventListener('input', function () {
+  document.querySelectorAll('.examples button').forEach(b => b.classList.remove('active'));
+});
+
+function buildResultHtml(data) {
+  let html = `<div class="status ${data.status}">${escapeHtml(data.status.toUpperCase())}</div>`;
+
+  if (data.status === 'clarify' || data.status === 'refuse' || data.status === 'escalate' || data.status === 'error') {
+    html += `<p>${escapeHtml(data.reason || '')}</p>`;
+    return html;
+  }
+
+  if (data.status === 'pending_review') {
+    const level = (data.confidence && data.confidence.level) || 'low';
+    html += `<span class="badge ${level}"><span class="dot"></span>${escapeHtml(level)} confidence</span>`;
+    const badgedAnswer = badgifyAnswer(escapeHtml(data.answer), data.citations, data.request_id);
+    html += `<p id="answer">${badgedAnswer}</p>`;
+    html += `<p style="font-size:0.8rem;color:#94a3b8;">${escapeHtml(data.confidence.basis)}</p>`;
+
+    html += '<h3>Citations</h3>';
+    html += '<div class="citations-grid">';
+    (data.citations || []).forEach((c, i) => {
+      html += `<div class="citation" id="citation-${data.request_id}-${i + 1}"><span class="prefix-icon">&#128278;</span><span class="locator">${escapeHtml(c.source)} / ${escapeHtml(c.locator)}</span><br>${escapeHtml(c.snippet)}</div>`;
+    });
+    html += '</div>';
+
+    html += '<h3>Gaps</h3>';
+    (data.gaps || []).forEach(g => {
+      html += `<div class="gap"><span class="prefix-icon">&#9888;</span>${escapeHtml(g)}</div>`;
+    });
+
+    html += `<h3>Human review</h3>
+      <div id="review-actions-${data.request_id}">
+        <button onclick="decide('${data.request_id}', true)">Approve &amp; release</button>
+        <button class="reject" onclick="decide('${data.request_id}', false)">Reject</button>
+      </div>`;
+  }
+
+  return html;
+}
+
+async function decide(requestId, approved) {
+  const actionsEl = document.getElementById(`review-actions-${requestId}`);
+  actionsEl.innerHTML = '<div class="loading"><span class="spinner"></span><span>Recording decision&hellip;</span></div>';
+  const resp = await fetch(`/api/review/${requestId}/decision`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ approved })
+  });
+  const data = await resp.json();
+  actionsEl.innerHTML = `<div class="status ${data.status}">${escapeHtml(data.status.toUpperCase())} (request ${escapeHtml(data.request_id || '')})</div>`;
+}
+</script>
+</body>
+</html>

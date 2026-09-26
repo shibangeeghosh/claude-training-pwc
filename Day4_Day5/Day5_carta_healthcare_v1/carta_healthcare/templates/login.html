@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Carta Healthcare POC — Login</title>
+  <style>
+    body { background: #0f1115; color: #e6e6e6; font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    .card { background: #1a1d24; border: 1px solid #2a2e38; border-radius: 8px; padding: 32px; width: 340px; }
+    h1 { font-size: 18px; margin: 0 0 4px; }
+    .step { color: #7a8296; font-size: 12px; margin-bottom: 20px; }
+    label { display: block; font-size: 13px; margin-bottom: 6px; color: #b7bcc7; }
+    input { width: 100%; padding: 8px 10px; margin-bottom: 16px; border-radius: 4px; border: 1px solid #333844; background: #10121a; color: #e6e6e6; box-sizing: border-box; }
+    button { width: 100%; padding: 10px; background: #3b6fe0; border: none; border-radius: 4px; color: white; font-size: 14px; cursor: pointer; }
+    button:hover { background: #4a7cf0; }
+    .error { color: #ef6a6a; font-size: 13px; margin-bottom: 12px; }
+    .hint { color: #5c6377; font-size: 11px; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Carta Healthcare — Clinical Extraction POC</h1>
+    <div class="step">Step 1 of 3 — Sign in</div>
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <form method="POST" action="{{ url_for('login') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" autocomplete="username" required />
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" autocomplete="current-password" required />
+      <button type="submit">Sign in</button>
+    </form>
+    <div class="hint">Demo account: abstractor1 / abstractor123</div>
+  </div>
+</body>
+</html>

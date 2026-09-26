@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "search_literature|search_trials|search_patents|search_internal_reports",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/check_allowlist.py"
+          }
+        ]
+      }
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpJsonServers": ["lit-review", "k6"]
+}

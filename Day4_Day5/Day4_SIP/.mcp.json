@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "fund-data": {
+      "args": [
+        "fund_data_mcp_server.py"
+      ],
+      "command": "python3",
+      "env": {},
+      "type": "stdio"
+    },
+    "k6": {
+      "args": [
+        "x",
+        "mcp"
+      ],
+      "command": "k6",
+      "type": "stdio"
+    }
+  }
+}

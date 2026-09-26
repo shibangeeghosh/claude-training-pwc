@@ -1,0 +1,38 @@
+[
+  {
+    "code": "I21.3",
+    "description": "ST elevation (STEMI) myocardial infarction of unspecified site",
+    "synonyms": ["acute myocardial infarction", "heart attack", "STEMI", "acute ST-elevation myocardial infarction"],
+    "coding_standard": "icd10"
+  },
+  {
+    "code": "K35.80",
+    "description": "Unspecified acute appendicitis",
+    "synonyms": ["acute appendicitis", "inflamed appendix"],
+    "coding_standard": "icd10"
+  },
+  {
+    "code": "C50.911",
+    "description": "Malignant neoplasm of unspecified site of right female breast",
+    "synonyms": ["breast cancer", "invasive ductal carcinoma of the breast"],
+    "coding_standard": "icd10"
+  },
+  {
+    "code": "J18.9",
+    "description": "Pneumonia, unspecified organism",
+    "synonyms": ["pneumonia"],
+    "coding_standard": "icd10"
+  },
+  {
+    "code": "N39.0",
+    "description": "Urinary tract infection, site not specified",
+    "synonyms": ["UTI", "urinary tract infection"],
+    "coding_standard": "icd10"
+  },
+  {
+    "code": "E11.9",
+    "description": "Type 2 diabetes mellitus without complications",
+    "synonyms": ["type 2 diabetes"],
+    "coding_standard": "icd10"
+  }
+]

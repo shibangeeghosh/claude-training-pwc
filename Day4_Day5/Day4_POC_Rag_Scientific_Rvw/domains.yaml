@@ -1,0 +1,18 @@
+# Therapeutic/research areas a user can scope a review session to.
+# `keywords` seed the ambiguity-fallback query planner (used only if the LLM call fails).
+domains:
+  - id: oncology
+    label: "Oncology"
+    keywords: ["cancer", "tumor", "oncology", "chemotherapy", "carcinoma"]
+  - id: cardiovascular
+    label: "Cardiovascular"
+    keywords: ["cardiac", "heart", "cardiovascular", "hypertension", "atrial"]
+  - id: diabetes_metabolic
+    label: "Diabetes / Metabolic"
+    keywords: ["diabetes", "metformin", "glucose", "insulin", "metabolic"]
+  - id: neurology
+    label: "Neurology"
+    keywords: ["neuro", "alzheimer", "parkinson", "seizure", "cognitive"]
+  - id: infectious_disease
+    label: "Infectious Disease"
+    keywords: ["infection", "antibiotic", "antiviral", "vaccine", "pathogen"]

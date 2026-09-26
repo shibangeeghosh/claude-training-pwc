@@ -1,0 +1,46 @@
+[
+  {
+    "id": "IR001",
+    "domain": "oncology",
+    "source": "internal_reports",
+    "source_url": "reports.internal.corp/oncology/IR001",
+    "locator": "IR-ONC-2026-001",
+    "title": "Internal formulation stability review: PARP inhibitor combination candidate",
+    "snippet": "Internal stability review found the combination formulation candidate met 24-month shelf-life targets under accelerated storage conditions.",
+    "keywords": ["parp", "oncology", "cancer", "formulation"],
+    "date": "2026-02-01"
+  },
+  {
+    "id": "IR010",
+    "domain": "cardiovascular",
+    "source": "internal_reports",
+    "source_url": "reports.internal.corp/cardiovascular/IR010",
+    "locator": "IR-CV-2025-010",
+    "title": "Internal PK/PD summary: SGLT2 inhibitor + antihypertensive combination",
+    "snippet": "Internal PK/PD summary confirmed no clinically significant interaction between the SGLT2 inhibitor and antihypertensive agent at proposed combination doses.",
+    "keywords": ["cardiovascular", "hypertension", "cardiac"],
+    "date": "2025-11-05"
+  },
+  {
+    "id": "IR020",
+    "domain": "diabetes_metabolic",
+    "source": "internal_reports",
+    "source_url": "reports.internal.corp/diabetes/IR020",
+    "locator": "IR-DM-2026-020",
+    "title": "Internal manufacturing note: metformin slow-release polymer matrix sourcing",
+    "snippet": "Manufacturing note flags a secondary supplier qualification in progress for the polymer matrix used in the slow-release metformin formulation.",
+    "keywords": ["metformin", "diabetes", "metabolic", "formulation"],
+    "date": "2026-03-18"
+  },
+  {
+    "id": "IR040",
+    "domain": "infectious_disease",
+    "source": "internal_reports",
+    "source_url": "reports.internal.corp/infectious/IR040",
+    "locator": "IR-ID-2026-040",
+    "title": "Internal cold-chain assessment: lyophilized antiviral formulation",
+    "snippet": "Cold-chain assessment concluded the lyophilized formulation is stable at refrigerated temperatures for at least 18 months, supporting field deployment plans.",
+    "keywords": ["antiviral", "infection", "pathogen", "formulation"],
+    "date": "2026-04-22"
+  }
+]

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Carta Healthcare POC</title>
+  <style>
+    body { background: #0f1115; color: #e6e6e6; font-family: system-ui, sans-serif; margin: 0; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid #2a2e38; }
+    header h1 { font-size: 16px; margin: 0; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 8px; background: #262b36; color: #b7bcc7; }
+    nav a { color: #7a8296; font-size: 12px; margin-left: 16px; text-decoration: none; }
+    nav a:hover { color: #e6e6e6; }
+    main { padding: 24px; max-width: 960px; margin: 0 auto; }
+    .panel { background: #1a1d24; border: 1px solid #2a2e38; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+    select, button { padding: 8px 12px; border-radius: 4px; border: 1px solid #333844; background: #10121a; color: #e6e6e6; font-size: 13px; }
+    button.primary { background: #3b6fe0; border: none; color: white; cursor: pointer; }
+    button.primary:hover { background: #4a7cf0; }
+    button.small { padding: 4px 8px; font-size: 12px; cursor: pointer; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    th, td { text-align: left; padding: 8px; border-bottom: 1px solid #2a2e38; font-size: 13px; vertical-align: top; }
+    th { color: #7a8296; font-weight: 500; font-size: 11px; text-transform: uppercase; }
+    .status-accepted { color: #5fd28a; font-weight: 600; }
+    .status-exception { color: #ef6a6a; font-weight: 600; }
+    .excerpt { color: #7a8296; font-size: 12px; font-style: italic; }
+    .conf-badge { display: inline-block; padding: 1px 6px; border-radius: 10px; background: #262b36; font-size: 11px; }
+    .actions button { margin-right: 6px; }
+    #status-line { color: #7a8296; font-size: 13px; margin-top: 10px; }
+    .doc-summary { font-size: 13px; color: #b7bcc7; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Carta Healthcare — Clinical Extraction POC
+      <span class="badge">{{ registry.name }}</span>
+      <span class="badge">{{ model }}</span>
+    </h1>
+    <nav>
+      <a href="{{ url_for('api_key') }}">Change API key/model</a>
+      <a href="{{ url_for('select_registry') }}">Change registry</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+  </header>
+  <main>
+    <div class="panel">
+      <label for="sample_select">Sample document (synthetic — not real PHI)</label><br />
+      <select id="sample_select">
+        {% for doc in sample_docs %}
+        <option value="{{ doc.filename }}">{{ doc.label }}</option>
+        {% endfor %}
+      </select>
+      <button class="primary" id="process_btn">Process document</button>
+      <div id="status-line"></div>
+    </div>
+
+    <div class="panel" id="results_panel" style="display:none;">
+      <div class="doc-summary" id="doc_summary"></div>
+      <table>
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Value</th>
+            <th>Source excerpt</th>
+            <th>Confidence</th>
+            <th>Coding</th>
+            <th>Status</th>
+            <th>Abstractor action</th>
+          </tr>
+        </thead>
+        <tbody id="results_body"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function confidenceBadge(value) {
+      if (value === null || value === undefined) return '—';
+      return '<span class="conf-badge">' + (Math.round(value * 100)) + '%</span>';
+    }
+
+    function codingCell(field) {
+      if (!field.coding_standard) return '—';
+      if (!field.coding_standard_code) return escapeHtml(field.coding_standard) + ': no confident match';
+      return escapeHtml(field.coding_standard.toUpperCase()) + ' ' + escapeHtml(field.coding_standard_code);
+    }
+
+    function renderResults(doc) {
+      document.getElementById('results_panel').style.display = 'block';
+      document.getElementById('doc_summary').textContent =
+        'Document ' + doc.document_id + ' (' + (doc.document_type || 'unclassified') +
+        ') — classification confidence ' + Math.round(doc.classification_confidence * 100) + '% — ' +
+        doc.validation_summary.accepted + ' accepted / ' + doc.validation_summary.exceptions + ' exception(s) — status: ' + doc.status;
+
+      var body = document.getElementById('results_body');
+      body.innerHTML = '';
+
+      doc.fields.forEach(function (field) {
+        var row = document.createElement('tr');
+        var statusClass = field.status === 'accepted' ? 'status-accepted' : 'status-exception';
+        var actionsHtml = '—';
+        if (field.status === 'exception' && field.exception_id) {
+          actionsHtml =
+            '<div class="actions">' +
+            '<button class="small" data-action="confirmed" data-id="' + escapeHtml(field.exception_id) + '">Confirm</button>' +
+            '<button class="small" data-action="corrected" data-id="' + escapeHtml(field.exception_id) + '">Correct</button>' +
+            '</div>';
+        }
+        row.innerHTML =
+          '<td>' + escapeHtml(field.field_name) + '</td>' +
+          '<td>' + escapeHtml(field.normalized_value) + '</td>' +
+          '<td class="excerpt">' + escapeHtml(field.source_excerpt) + '</td>' +
+          '<td>' + confidenceBadge(field.extraction_confidence) + '</td>' +
+          '<td>' + codingCell(field) + '</td>' +
+          '<td class="' + statusClass + '">' + escapeHtml(field.status) +
+            (field.reason ? '<br><span class="excerpt">' + escapeHtml(field.reason) + '</span>' : '') + '</td>' +
+          '<td>' + actionsHtml + '</td>';
+        body.appendChild(row);
+      });
+
+      body.querySelectorAll('button[data-action]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var action = btn.getAttribute('data-action');
+          var exceptionId = btn.getAttribute('data-id');
+          var correctedValue = null;
+          if (action === 'corrected') {
+            correctedValue = prompt('Enter the corrected value:');
+            if (correctedValue === null) return;
+          }
+          fetch('/api/exceptions/' + encodeURIComponent(exceptionId) + '/resolve', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ resolution: action, corrected_value: correctedValue }),
+          })
+            .then(function (r) { return r.json(); })
+            .then(function () {
+              btn.closest('td').innerHTML = 'resolved: ' + escapeHtml(action);
+            });
+        });
+      });
+    }
+
+    document.getElementById('process_btn').addEventListener('click', function () {
+      var filename = document.getElementById('sample_select').value;
+      var statusLine = document.getElementById('status-line');
+      statusLine.textContent = 'Processing…';
+      fetch('/api/documents', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename: filename }),
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (doc) {
+          statusLine.textContent = '';
+          renderResults(doc);
+        })
+        .catch(function () {
+          statusLine.textContent = 'Something went wrong processing this document.';
+        });
+    });
+  </script>
+</body>
+</html>

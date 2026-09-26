@@ -1,0 +1,665 @@
+{
+  "nodes": [
+    {
+      "id": "g0",
+      "type": "group",
+      "label": "App & Docs Overview",
+      "x": 0,
+      "y": 0,
+      "width": 660,
+      "height": 420,
+      "color": "1"
+    },
+    {
+      "id": "n_mcp_json_file",
+      "type": "file",
+      "file": "dot-mcp.json (MCP server registration).md",
+      "x": 20,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_templates_index_calculate_handler",
+      "type": "file",
+      "file": "Calculate button click handler.md",
+      "x": 220,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_app_api_calculate_route",
+      "type": "file",
+      "file": "POST apicalculate route.md",
+      "x": 420,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_sip_calculator",
+      "type": "file",
+      "file": "SIP Calculator project.md",
+      "x": 20,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_app_module",
+      "type": "file",
+      "file": "app.py (Flask application).md",
+      "x": 220,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_requirements_flask",
+      "type": "file",
+      "file": "flask (dependency).md",
+      "x": 420,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_claude_agents_sip_backend_agent",
+      "type": "file",
+      "file": "sip-backend Subagent (Backend Specialist).md",
+      "x": 20,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_sip_calculator_module",
+      "type": "file",
+      "file": "sip_calculator.py (SIP maturity formula module).md",
+      "x": 220,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_templates_index_page",
+      "type": "file",
+      "file": "templatesindex.html (SIP calculator form page).md",
+      "x": 420,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g1",
+      "type": "group",
+      "label": "Fund Search & NAV Tools",
+      "x": 740,
+      "y": 0,
+      "width": 660,
+      "height": 420,
+      "color": "2"
+    },
+    {
+      "id": "n_fund_data_mcp_server_rationale_31",
+      "type": "file",
+      "file": "Get the latest available NAV (net asset value, in INR per unit) for a scheme\u2026.md",
+      "x": 760,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_fund_data_mcp_server_rationale_17",
+      "type": "file",
+      "file": "Search for mutual fund schemes by (partial) name. Returns matching\u2026.md",
+      "x": 960,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_fund_data_mcp_server_module",
+      "type": "file",
+      "file": "fund_data_mcp_server.py (fund-data MCP server).md",
+      "x": 1160,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_fund_data_mcp_server_get_fund_nav",
+      "type": "file",
+      "file": "get_fund_nav().md",
+      "x": 760,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_requirements_mcp",
+      "type": "file",
+      "file": "mcp (dependency).md",
+      "x": 960,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_mfapi_in",
+      "type": "file",
+      "file": "mfapi.in (free, no-auth mutual fund data API).md",
+      "x": 1160,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_requirements_requests",
+      "type": "file",
+      "file": "requests (dependency).md",
+      "x": 760,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_fund_data_mcp_server_search_fund",
+      "type": "file",
+      "file": "search_fund().md",
+      "x": 960,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_tool",
+      "type": "file",
+      "file": "tool.md",
+      "x": 1160,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g2",
+      "type": "group",
+      "label": "Flask Calculator Code",
+      "x": 1480,
+      "y": 0,
+      "width": 660,
+      "height": 420,
+      "color": "3"
+    },
+    {
+      "id": "n_sip_calculator_rationale_1",
+      "type": "file",
+      "file": "Core SIP maturity math, kept separate from the Flask routes so it can be unit\u2026.md",
+      "x": 1500,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_app",
+      "type": "file",
+      "file": "app.py.md",
+      "x": 1700,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_app_calculate",
+      "type": "file",
+      "file": "calculate().md",
+      "x": 1900,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_sip_calculator_calculate_sip",
+      "type": "file",
+      "file": "calculate_sip().md",
+      "x": 1500,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_flask",
+      "type": "file",
+      "file": "flask.md",
+      "x": 1700,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_app_index",
+      "type": "file",
+      "file": "index().md",
+      "x": 1900,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_route",
+      "type": "file",
+      "file": "route.md",
+      "x": 1500,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_sip_calculator",
+      "type": "file",
+      "file": "sip_calculator.py.md",
+      "x": 1700,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g3",
+      "type": "group",
+      "label": "Fund CAGR MCP Code",
+      "x": 0,
+      "y": 500,
+      "width": 660,
+      "height": 420,
+      "color": "4"
+    },
+    {
+      "id": "n_fund_data_mcp_server_rationale_54",
+      "type": "file",
+      "file": "Estimate a fund's annualized return (CAGR) over the trailing N years using its\u2026.md",
+      "x": 20,
+      "y": 580,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_fund_data_mcp_server_rationale_1",
+      "type": "file",
+      "file": "MCP server that fetches live Indian mutual fund data from api.mfapi.in (free,\u2026.md",
+      "x": 220,
+      "y": 580,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_datetime",
+      "type": "file",
+      "file": "datetime.md",
+      "x": 420,
+      "y": 580,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_fund_data_mcp_server",
+      "type": "file",
+      "file": "fund_data_mcp_server.py.md",
+      "x": 20,
+      "y": 660,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_fund_data_mcp_server_get_fund_cagr",
+      "type": "file",
+      "file": "get_fund_cagr().md",
+      "x": 220,
+      "y": 660,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_mcp_server_mcpserver",
+      "type": "file",
+      "file": "mcp_server_mcpserver.md",
+      "x": 420,
+      "y": 660,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_fund_data_mcp_server_get_fund_cagr_parse",
+      "type": "file",
+      "file": "parse().md",
+      "x": 20,
+      "y": 740,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_requests",
+      "type": "file",
+      "file": "requests.md",
+      "x": 220,
+      "y": 740,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g4",
+      "type": "group",
+      "label": "MCP Server Config",
+      "x": 740,
+      "y": 500,
+      "width": 600,
+      "height": 400,
+      "color": "5"
+    },
+    {
+      "id": "n_mcp",
+      "type": "file",
+      "file": "dot-mcp.json.md",
+      "x": 760,
+      "y": 580,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_mcp_mcp_server_fund_data",
+      "type": "file",
+      "file": "fund-data.md",
+      "x": 960,
+      "y": 580,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_mcp_command_python3",
+      "type": "file",
+      "file": "python3.md",
+      "x": 760,
+      "y": 660,
+      "width": 180,
+      "height": 60
+    }
+  ],
+  "edges": [
+    {
+      "id": "e_fund_data_mcp_server_get_fund_nav_tool",
+      "fromNode": "n_fund_data_mcp_server_get_fund_nav",
+      "toNode": "n_tool",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_get_fund_nav_fund_data_mcp_server",
+      "fromNode": "n_fund_data_mcp_server_get_fund_nav",
+      "toNode": "n_fund_data_mcp_server",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_get_fund_nav_fund_data_mcp_server_rationale_31",
+      "fromNode": "n_fund_data_mcp_server_get_fund_nav",
+      "toNode": "n_fund_data_mcp_server_rationale_31",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_get_fund_nav_fund_data_mcp_server_module",
+      "fromNode": "n_fund_data_mcp_server_get_fund_nav",
+      "toNode": "n_fund_data_mcp_server_module",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_search_fund_tool",
+      "fromNode": "n_fund_data_mcp_server_search_fund",
+      "toNode": "n_tool",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_search_fund_fund_data_mcp_server",
+      "fromNode": "n_fund_data_mcp_server_search_fund",
+      "toNode": "n_fund_data_mcp_server",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_search_fund_fund_data_mcp_server_rationale_17",
+      "fromNode": "n_fund_data_mcp_server_search_fund",
+      "toNode": "n_fund_data_mcp_server_rationale_17",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_search_fund_fund_data_mcp_server_module",
+      "fromNode": "n_fund_data_mcp_server_search_fund",
+      "toNode": "n_fund_data_mcp_server_module",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_app_calculate_sip_calculator_calculate_sip",
+      "fromNode": "n_app_calculate",
+      "toNode": "n_sip_calculator_calculate_sip",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_app_calculate_route",
+      "fromNode": "n_app_calculate",
+      "toNode": "n_route",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_app_calculate_app",
+      "fromNode": "n_app_calculate",
+      "toNode": "n_app",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_index_route",
+      "fromNode": "n_app_index",
+      "toNode": "n_route",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_app_index_app",
+      "fromNode": "n_app_index",
+      "toNode": "n_app",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_sip_calculator_calculate_sip_app",
+      "fromNode": "n_sip_calculator_calculate_sip",
+      "toNode": "n_app",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_sip_calculator_calculate_sip_sip_calculator",
+      "fromNode": "n_sip_calculator_calculate_sip",
+      "toNode": "n_sip_calculator",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_sip_calculator_calculate_sip_claude_agents_sip_backend_agent",
+      "fromNode": "n_sip_calculator_calculate_sip",
+      "toNode": "n_claude_agents_sip_backend_agent",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_get_fund_cagr_fund_data_mcp_server_get_fund_cagr_parse",
+      "fromNode": "n_fund_data_mcp_server_get_fund_cagr",
+      "toNode": "n_fund_data_mcp_server_get_fund_cagr_parse",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_get_fund_cagr_tool",
+      "fromNode": "n_fund_data_mcp_server_get_fund_cagr",
+      "toNode": "n_tool",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_get_fund_cagr_fund_data_mcp_server",
+      "fromNode": "n_fund_data_mcp_server_get_fund_cagr",
+      "toNode": "n_fund_data_mcp_server",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_get_fund_cagr_fund_data_mcp_server_rationale_54",
+      "fromNode": "n_fund_data_mcp_server_get_fund_cagr",
+      "toNode": "n_fund_data_mcp_server_rationale_54",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_get_fund_cagr_fund_data_mcp_server_module",
+      "fromNode": "n_fund_data_mcp_server_get_fund_cagr",
+      "toNode": "n_fund_data_mcp_server_module",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_get_fund_cagr_app_api_calculate_route",
+      "fromNode": "n_fund_data_mcp_server_get_fund_cagr",
+      "toNode": "n_app_api_calculate_route",
+      "label": "shares_data_with [EXTRACTED]"
+    },
+    {
+      "id": "e_app_flask",
+      "fromNode": "n_app",
+      "toNode": "n_flask",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_app_sip_calculator",
+      "fromNode": "n_app",
+      "toNode": "n_sip_calculator",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_sip_calculator_sip_calculator_rationale_1",
+      "fromNode": "n_sip_calculator",
+      "toNode": "n_sip_calculator_rationale_1",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_requests",
+      "fromNode": "n_fund_data_mcp_server",
+      "toNode": "n_requests",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_datetime",
+      "fromNode": "n_fund_data_mcp_server",
+      "toNode": "n_datetime",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_mcp_server_mcpserver",
+      "fromNode": "n_fund_data_mcp_server",
+      "toNode": "n_mcp_server_mcpserver",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_fund_data_mcp_server_rationale_1",
+      "fromNode": "n_fund_data_mcp_server",
+      "toNode": "n_fund_data_mcp_server_rationale_1",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_mcp_mcp_mcp_server_fund_data",
+      "fromNode": "n_mcp",
+      "toNode": "n_mcp_mcp_server_fund_data",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_mcp_command_python3_mcp_mcp_server_fund_data",
+      "fromNode": "n_mcp_command_python3",
+      "toNode": "n_mcp_mcp_server_fund_data",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_app_module_claude_agents_sip_backend_agent",
+      "fromNode": "n_app_module",
+      "toNode": "n_claude_agents_sip_backend_agent",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_app_module_readme_sip_calculator",
+      "fromNode": "n_app_module",
+      "toNode": "n_readme_sip_calculator",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_app_module_requirements_flask",
+      "fromNode": "n_app_module",
+      "toNode": "n_requirements_flask",
+      "label": "references [INFERRED]"
+    },
+    {
+      "id": "e_sip_calculator_module_claude_agents_sip_backend_agent",
+      "fromNode": "n_sip_calculator_module",
+      "toNode": "n_claude_agents_sip_backend_agent",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_sip_calculator_module_readme_sip_calculator",
+      "fromNode": "n_sip_calculator_module",
+      "toNode": "n_readme_sip_calculator",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_templates_index_calculate_handler_app_api_calculate_route",
+      "fromNode": "n_templates_index_calculate_handler",
+      "toNode": "n_app_api_calculate_route",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_templates_index_calculate_handler_templates_index_page",
+      "fromNode": "n_templates_index_calculate_handler",
+      "toNode": "n_templates_index_page",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_templates_index_page_readme_sip_calculator",
+      "fromNode": "n_templates_index_page",
+      "toNode": "n_readme_sip_calculator",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_app_api_calculate_route_claude_agents_sip_backend_agent",
+      "fromNode": "n_app_api_calculate_route",
+      "toNode": "n_claude_agents_sip_backend_agent",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_mcp_json_file_readme_sip_calculator",
+      "fromNode": "n_mcp_json_file",
+      "toNode": "n_readme_sip_calculator",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_sip_calculator_claude_agents_sip_backend_agent",
+      "fromNode": "n_readme_sip_calculator",
+      "toNode": "n_claude_agents_sip_backend_agent",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_sip_calculator_fund_data_mcp_server_module",
+      "fromNode": "n_readme_sip_calculator",
+      "toNode": "n_fund_data_mcp_server_module",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_module_mfapi_in",
+      "fromNode": "n_fund_data_mcp_server_module",
+      "toNode": "n_mfapi_in",
+      "label": "cites [EXTRACTED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_module_requirements_requests",
+      "fromNode": "n_fund_data_mcp_server_module",
+      "toNode": "n_requirements_requests",
+      "label": "references [INFERRED]"
+    },
+    {
+      "id": "e_fund_data_mcp_server_module_requirements_mcp",
+      "fromNode": "n_fund_data_mcp_server_module",
+      "toNode": "n_requirements_mcp",
+      "label": "references [INFERRED]"
+    }
+  ]
+}
